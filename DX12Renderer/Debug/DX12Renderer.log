@@ -1,0 +1,16 @@
+﻿  已复制         1 个文件。
+  Camera.cpp
+  DescriptorPool.cpp
+  Game.cpp
+  HeapResourceData.cpp
+  Input.cpp
+  Main.cpp
+  Mesh.cpp
+  RenderObject.cpp
+  Renderer.cpp
+D:\VS2019项目文件\C++\DX12Renderer\DX12Renderer\Renderer.cpp(446,21): warning C4018: “<”: 有符号/无符号不匹配
+  SwapChain.cpp
+  Texture.cpp
+  Transform.cpp
+  正在生成代码...
+  DX12Renderer.vcxproj -> D:\VS2019项目文件\C++\DX12Renderer\Debug\DX12Renderer.exe
