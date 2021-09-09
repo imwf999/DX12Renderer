@@ -5,6 +5,8 @@
 #include <DirectXMath.h>
 namespace rdr
 {
+	//点光源的宏，取消注释后会关闭平行光开启中央点光源，并投射阴影，运行没问题，但是点光阴影的投射
+	// 还没完全做好，另外CommonData.hlsl中对应的同名的宏也要取消注释
 //#define POINTSHADOW
 	//窗口宽度
 	constexpr int global_WindowWidth = 1280;
@@ -21,22 +23,11 @@ namespace rdr
 	//摄像机移动速度，慢速
 	constexpr float global_cameraMoveLowSpeed = 300.0f;
 	//摄像机移动速度，快速
-	constexpr float global_cameraMoveHighSpeed = 670.0f;
+	constexpr float global_cameraMoveHighSpeed = 700.0f;
 	//生成阴影的正交投影的宽度
 	constexpr uint32_t global_lightProjectionWidth = 5000;
 	//生成阴影图的正交投影的高度
 	constexpr uint32_t global_lightProjectionHeight = 5000;
-	//平行光方向	
-	constexpr DirectX::XMFLOAT4 global_directionalLightDirection = { 0.0f, -0.8f, 0.3f, 0 };
-	//主点光源位置
-	constexpr DirectX::XMFLOAT3 global_mainPointPosition = { 0, 600, 0 };
-	//点光源的几种颜色
-	constexpr DirectX::XMFLOAT3 global_ColorRed = { 1, 0, 0 };
-	constexpr DirectX::XMFLOAT3 global_ColorGreen = { 0, 1, 0 };
-	constexpr DirectX::XMFLOAT3 global_ColorBlue = { 0, 0, 1 };
-	constexpr DirectX::XMFLOAT3 global_ColorPurple = { 0.5f, 0, 0.5f };
-	constexpr DirectX::XMFLOAT3 global_ColorYellow = { 1, 1, 0 };
-	constexpr DirectX::XMFLOAT3 global_ColorWhite = { 1, 1, 1 };
 	//初始默认堆大小
 	constexpr uint64_t global_DefaultHeapSize = D3D12_DEFAULT_MSAA_RESOURCE_PLACEMENT_ALIGNMENT * 120;
 	//初始上传堆大小

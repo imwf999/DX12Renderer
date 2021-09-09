@@ -5,18 +5,10 @@
 #include "HeapResourceManager.h"
 #include "MathHelper.h"
 #include <DirectXMath.h>
+#include "LightPool.h"
 
 namespace rdr
 {
-	struct Light
-	{
-		DirectX::XMFLOAT3 color = { 1.0f, 1.0f, 1.0f };
-		float fallOffStart = 100.0f;
-		DirectX::XMFLOAT4 direction = global_directionalLightDirection;
-		DirectX::XMFLOAT3 position = { 0.0f, 0.0f, 0.0f };
-		float fallOffEnd = 400.0f;
-	};
-
 	struct ObjectConstant
 	{
 		DirectX::XMFLOAT4X4 objToWold = MathHelper::Identity4x4();

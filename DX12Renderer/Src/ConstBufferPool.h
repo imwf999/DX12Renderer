@@ -7,7 +7,7 @@
 namespace rdr 
 {
 	class Camera;
-
+	class LightPool;
 	class ConstBufferPool
 	{
 	public:
@@ -36,5 +36,6 @@ namespace rdr
 		std::vector<ConstantBuffer<ObjectConstant>> objConstBufferVec;
 		std::vector<ConstantBuffer<PassConstant>> passConstBufferVec;
 		std::vector<ConstantBuffer<MaterialConstant>> matConstBufferVec;
+		std::unique_ptr<LightPool> lightPool;
 	};
 }

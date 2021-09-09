@@ -11,7 +11,11 @@ namespace rdr
 		smapPsoDesc.VS = CD3DX12_SHADER_BYTECODE(pass.GetVertexShaderCode(), pass.GetVertexShaderSize());
 		smapPsoDesc.PS = CD3DX12_SHADER_BYTECODE(pass.GetPixelShaderCode(), pass.GetPixelShaderSize());
 		smapPsoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+#ifdef POINTSHADOW
+		smapPsoDesc.RasterizerState.DepthBias = 10;
+#else
 		smapPsoDesc.RasterizerState.DepthBias = 100000;
+#endif
 		smapPsoDesc.RasterizerState.DepthBiasClamp = 0.0f;
 		smapPsoDesc.RasterizerState.SlopeScaledDepthBias = 1.0f;
 		smapPsoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);

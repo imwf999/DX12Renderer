@@ -120,22 +120,22 @@ namespace rdr
 		slot.spacePosition = 0;
 		slot.constBufferIndex = 2;
 		vecRight.emplace_back(slot);
-		Pass rightPass(vecRight, L"..\\..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
+		Pass rightPass(vecRight, L"..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
 
 		vecRight[1].constBufferIndex = 3;
-		Pass leftPass(vecRight, L"..\\..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
+		Pass leftPass(vecRight, L"..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
 
 		vecRight[1].constBufferIndex = 4;
-		Pass forwardPass(vecRight, L"..\\..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
+		Pass forwardPass(vecRight, L"..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
 
 		vecRight[1].constBufferIndex = 5;
-		Pass backPass(vecRight, L"..\\..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
+		Pass backPass(vecRight, L"..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
 
 		vecRight[1].constBufferIndex = 6;
-		Pass upPass(vecRight, L"..\\..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
+		Pass upPass(vecRight, L"..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
 
 		vecRight[1].constBufferIndex = 7;
-		Pass downPass(vecRight, L"..\\..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
+		Pass downPass(vecRight, L"..\\Shader\\ShadowMapMain.hlsl", "VSMain", "PSMain", pDevice);
 
 		passVec.emplace_back(std::move(rightPass));
 		passVec.emplace_back(std::move(leftPass));

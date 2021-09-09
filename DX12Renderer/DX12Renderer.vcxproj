@@ -234,6 +234,7 @@
     <ClInclude Include="Src\IPipelineState.h" />
     <ClInclude Include="Src\IResource.h" />
     <ClInclude Include="Src\ITexture.h" />
+    <ClInclude Include="Src\LightPool.h" />
     <ClInclude Include="Src\MathHelper.h" />
     <ClInclude Include="Src\Mesh.h" />
     <ClInclude Include="Src\Pass.h" />

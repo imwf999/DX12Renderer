@@ -82,8 +82,6 @@ float CalculateShadowFactor(float4 shadowPosH)
 // float ComputePointShadowFactor(float4 shadowPosH, uint shadowMapIndex)
 // {
 //     shadowPosH.xyz = shadowPosH.xyz / shadowPosH.w;
-//     if(shadowPosH.x <= -1 || shadowPosH.x >= 1.000 || shadowPosH.y <= -1 || shadowPosH.y >= 1.000 || shadowPosH.z <= 0 || shadowPosH.z >= 1.000)
-//     return 1;
 //     float depth = shadowPosH.z;
     
 //     uint width, height, numLevels;
@@ -103,17 +101,18 @@ float CalculateShadowFactor(float4 shadowPosH)
 //     [unroll]
 //     for(int i = 0; i < 9; ++i)
 //     {
-//         //persentage += globalPointShadowMap.SampleCmpLevelZero(globalComSampler, shadowPosH.xy + offset[i], depth).r;
+//         persentage += globalPointShadowMap.SampleCmpLevelZero(globalComSampler, shadowPosH.xy + offset[i], depth).r;
 //     }
 
 //     return persentage / 9.0f;
 // }
+
 float ComputePointShadowFactor(float3 posW, float3 lightPos)
 {
     float3 fragToLightDir = posW - lightPos;
     float depth = globalPointShadowMap.Sample(globalSampler, fragToLightDir).r;
 
-    depth *= 8000;
+    depth *= 8000;      //远平面距离，硬编码
 
     float currentDepth = length(fragToLightDir);
 

@@ -72,7 +72,7 @@ float4 PSMain(VertexOutput pin) : SV_TARGET
 
     float m = globalShininess * 256 * tempNormal.a; 
 
-    float3 directionalLight = (0, 0, 0);// = ComputeDirectionalLight(globalLights[0], pin.worldPos, worldNormal, m, diffuseAbedo); //  平行光贡献的光量
+    float3 directionalLight = (0, 0, 0);            //平行光贡献的光亮
     float3 pointLight = (0, 0, 0);                  //点光源贡献的光亮
 
 #ifdef POINTSHADOW
