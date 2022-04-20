@@ -8,7 +8,7 @@ namespace rdr
 	DescriptorPool::DescriptorPool(ComPtr<ID3D12Device4> device, DescriptorPoolInitializeDesc desc)
 		: pDevice(device), srvNum(0), uavNum(0)
 	{
-		//TODO:描述符堆中描述符的数量，这里没有把参数暴露出来，直接写个默认值进去，后面要考虑更改一下
+		//TODO:描述符堆中描述符的数量，这里没有把参数暴露出来，直接写个默认值进去，要考虑更改一下
 
 		pSrvUavCbvHeap = std::make_unique<DescriptorHeap>(
 			device.Get(),
@@ -55,30 +55,7 @@ namespace rdr
 			pSamplerHeap->pDescriptorHeap->GetGPUDescriptorHandleForHeapStart()
 		};
 
-		D3D12_SAMPLER_DESC samplerDesc = {};
-		samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-		samplerDesc.MinLOD = 0;
-		samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
-		samplerDesc.MaxAnisotropy = 1;
-		samplerDesc.MipLODBias = 0.0f;
-		samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
-		samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		this->CreateSampler(&samplerDesc);
-
-		samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		samplerDesc.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-		samplerDesc.MipLODBias = 0.0f;
-		samplerDesc.MaxAnisotropy = 16;
-		samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-		samplerDesc.BorderColor[0] = 0.0f;
-		samplerDesc.BorderColor[1] = 0.0f;
-		samplerDesc.BorderColor[2] = 0.0f;
-		samplerDesc.BorderColor[3] = 1.0f;
-		this->CreateSampler(&samplerDesc);
+		CreateSamplers();
 	}
 
 	DescriptorPool::~DescriptorPool()
@@ -123,5 +100,59 @@ namespace rdr
 			pSamplerHeap->descriptorSize);
 		pDevice->CreateSampler(desc, handle);
 		return pSamplerHeap->currentDescIndex++;
+	}
+
+	void DescriptorPool::CreateSamplers()
+	{
+		D3D12_SAMPLER_DESC samplerDesc = {};
+		samplerDesc.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
+		samplerDesc.MaxAnisotropy = 8;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+		samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+		this->CreateSampler(&samplerDesc);
+
+		samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerDesc.Filter = D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MaxAnisotropy = 16;
+		samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		samplerDesc.BorderColor[0] = 0.0f;
+		samplerDesc.BorderColor[1] = 0.0f;
+		samplerDesc.BorderColor[2] = 0.0f;
+		samplerDesc.BorderColor[3] = 1.0f;
+		this->CreateSampler(&samplerDesc);
+
+		samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+		samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+		samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+		samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
+		samplerDesc.MaxAnisotropy = 1;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+		this->CreateSampler(&samplerDesc);
+
+		samplerDesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+		samplerDesc.MaxAnisotropy = 0;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		samplerDesc.MinLOD = 0;
+		samplerDesc.MaxLOD = D3D12_FLOAT32_MAX;
+		samplerDesc.BorderColor[0] = 1.0f;
+		samplerDesc.BorderColor[1] = 1.0f;
+		samplerDesc.BorderColor[2] = 1.0f;
+		samplerDesc.BorderColor[3] = 1.0f;
+		this->CreateSampler(&samplerDesc);
 	}
 }

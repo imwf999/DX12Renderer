@@ -1,26 +1,3 @@
 ﻿  已复制         1 个文件。
-  Camera.cpp
-  ConstBufferPool.cpp
-  DefaultPSO.cpp
-  DepthTexture.cpp
-  DescriptorPool.cpp
-  Display.cpp
-  Game.cpp
-  HeapResourceManager.cpp
-  Input.cpp
-  Main.cpp
-  Mesh.cpp
-  PSOPool.cpp
-  Pass.cpp
-  PassPool.cpp
-  RenderTexture.cpp
-  RendererFacade.cpp
-  RootSignature.cpp
-  ShadowMapPSO.cpp
-  SkyboxPSO.cpp
-  Texture.cpp
-  正在生成代码...
-  正在编译...
-  TexturePool.cpp
-  正在生成代码...
+  LINK : program database D:\VS2019项目文件\C++\DX12Renderer\DX12Renderer\DX12Renderer.pdb missing; performing full link
   DX12Renderer.vcxproj -> D:\VS2019项目文件\C++\DX12Renderer\DX12Renderer\DX12Renderer.exe

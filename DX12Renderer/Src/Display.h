@@ -8,27 +8,24 @@
 namespace rdr
 {
 	using Microsoft::WRL::ComPtr;
-	//class RenderTexture;
-	class RendererFacade;
+	class Renderer;
 
 	class Display
 	{
 	public:
-		Display(IDXGIFactory5* pDxgi, ID3D12Device4* pDev, IDXGIAdapter1* pAda, const RendererFacade& renderer);
+		Display(IDXGIFactory5* pDxgi, ID3D12Device4* pDev, IDXGIAdapter1* pAda, const Renderer& renderer);
 		~Display();
 
 	public:
-		void Present(const RendererFacade& renderer);
-		void SetRenderTarget(const RendererFacade& renderer);
-		void SetShadowMapTarget(ID3D12GraphicsCommandList* pList, ID3D12Resource* pResource);
-		void SetShadowMapResource(ID3D12GraphicsCommandList* pList, ID3D12Resource* pResource);
+		void Present(const Renderer& renderer);
+		void SetSwapChainStateToRenderTarget(const Renderer& renderer);
 		const D3D12_VIEWPORT& GetViewPort() const { return viewPort; }
 		const D3D12_RECT& GetRect() const { return rect; }
 		ID3D12Device4* GetDevice() const { return pd3dDevice; }
 		uint32_t GetCurBackBufferIndex() const { return currentBackBufferIndex; }
 
 	private:
-		static const int swapChainBufferCount = 2;		//交换链中后台缓冲的数量
+		static constexpr int swapChainBufferCount = 2;		//交换链中后台缓冲的数量
 		uint32_t currentBackBufferIndex;							//当前后台缓冲区的索引
 		ComPtr<IDXGISwapChain1> pSwapChain1;
 		ComPtr<IDXGISwapChain3> pSwapChain3;

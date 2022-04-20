@@ -5,10 +5,10 @@
 namespace rdr
 {
 	Camera::Camera()
-		: fovAngleY(0.25f * MathHelper::Pi),
-		aspect(global_WindowWidth / (float)global_WindowHeight),
-		nearZ(1.0f),
-		farZ(8000.0f),
+		: fovAngleY(0.25f * Math::Pi),
+		aspect(global_WindowWidth / static_cast<float>(global_WindowHeight)),
+		nearZ(50.0f),
+		farZ(3900.0f),
 		needUpdate(true),
 		moveSpeed(100.0)
 	{
@@ -19,15 +19,6 @@ namespace rdr
 
 		XMStoreFloat4x4(&viewMatrix, XMMatrixLookAtLH(XMLoadFloat3(&cameraPosition), XMVectorZero(), XMVectorSet(0, 1, 0, 0)));
 		XMStoreFloat4x4(&projMatrix, XMMatrixPerspectiveFovLH(fovAngleY, aspect, nearZ, farZ));
-
-#ifdef POINTSHADOW
-		float tempfovAngleY = 0.5f * MathHelper::Pi;
-		float tempaspect = 1;
-		float tempnearZ = 5;
-		float tempfarZ = 5000.0f;
-		XMStoreFloat4x4(&pointProjMatrix, XMMatrixPerspectiveFovLH(tempfovAngleY, tempaspect, tempnearZ, tempfarZ));
-		//XMStoreFloat4x4(&pointProjMatrix, XMMatrixOrthographicLH(800, 800, tempnearZ, tempfarZ));
-#endif
 	}
 
 	void Camera::MoveForward(float distance)

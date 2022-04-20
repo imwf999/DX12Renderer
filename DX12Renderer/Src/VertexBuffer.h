@@ -1,12 +1,14 @@
 ﻿#pragma once
-#include "IResource.h"
 #include <DirectXMath.h>
 #include <vector>
+#include "BaseResource.h"
+
 namespace rdr
 {
 	using namespace DirectX;
 	class Mesh;
-	class HeapResourceManager;
+	class Renderer;
+	class HeapManager;
 
 	struct VertexData
 	{
@@ -16,17 +18,17 @@ namespace rdr
 		XMFLOAT3 tangent;
 	};
 
-	class VertexBuffer final : public IResource
+	class VertexBuffer final : public BaseResource
 	{
-		friend HeapResourceManager;
-		friend Mesh;
-
 	public:
 		VertexBuffer() = default;
-		~VertexBuffer() = default;
+		~VertexBuffer() override;
+
+	public:
+		void CreateBuffer(const Renderer& renderer, const std::vector<VertexData>& vertexData);
+		const D3D12_VERTEX_BUFFER_VIEW& BufferView() const { return bufferView; }
 
 	private:
-		ComPtr<ID3D12Resource> pIntermediateResource;
-		std::vector<VertexData> vertexData;
+		D3D12_VERTEX_BUFFER_VIEW bufferView;
 	};
 }

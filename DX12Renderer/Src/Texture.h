@@ -1,23 +1,27 @@
 ﻿#pragma once
-#include "ITexture.h"
 #include <string>
-#include <memory>
-#include <vector>
+#include "BaseResource.h"
+
 namespace rdr
 {
-	class HeapResourceManager;
-	class RendererFacade;
+	class Renderer;
 
-	class Texture : public ITexture
+	class Texture : public BaseResource
 	{
-		friend HeapResourceManager;
+	public:
+		Texture() = default;
+		~Texture() override = default;
 
 	public:
-		Texture(const std::wstring& filePath, const RendererFacade& renderer, bool is2D);
+		uint32_t GetSrvIndex() const { return srvIndex; }
+		const std::string& GetName() const { return name; }
+		void SetName(const std::string& InName) { name = InName; }
 
-	private:
-		std::unique_ptr<uint8_t[]> ddsData;
-		std::vector<D3D12_SUBRESOURCE_DATA> subResourceVec;
-		ComPtr<ID3D12Resource> pIntermediateResource;
+	protected:
+		void CreateSRV(const Renderer& renderer, DXGI_FORMAT format, uint32_t mipLevel = 1, bool demensionIs2D = true);
+
+	protected:
+		uint32_t srvIndex = 0;
+		std::string name;
 	};
 }

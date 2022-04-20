@@ -18,19 +18,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shader\PhongShader.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\ShadowMap.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\SkyBox.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\CommonFunction.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\DrawNormal.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\SSAO.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\SSAOBlur.hlsl">
+      <Filter>Shader</Filter>
+    </None>
     <None Include="..\Shader\CommonData.hlsl">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\Shader\RenderToTextureMain.hlsl">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\Shader\ShaderMain.hlsl">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\Shader\ShadowMapMain.hlsl">
-      <Filter>Shader</Filter>
-    </None>
-    <None Include="..\Shader\SkyBoxMain.hlsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
@@ -41,16 +50,10 @@
     <ClCompile Include="Src\Commond.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\ConstBufferPool.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Src\d3dUtil.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Src\DDSTextureLoader12.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\DefaultPSO.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Src\DepthTexture.cpp">
@@ -68,7 +71,7 @@
     <ClCompile Include="Src\GameTimer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\HeapResourceManager.cpp">
+    <ClCompile Include="Src\HeapManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Src\Input.cpp">
@@ -83,16 +86,7 @@
     <ClCompile Include="Src\Mesh.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Pass.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\PassPool.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\PSOPool.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\RendererFacade.cpp">
+    <ClCompile Include="Src\Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Src\RenderTexture.cpp">
@@ -101,16 +95,52 @@
     <ClCompile Include="Src\RootSignature.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\ShadowMapPSO.cpp">
+    <ClCompile Include="Src\CommonTexture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\SkyboxPSO.cpp">
+    <ClCompile Include="Src\TexturePool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\IndexBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ShaderPool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MaterialPool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\PSO.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SSAO.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Shadow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\FrameConstBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\VertexBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\BaseResource.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Src\Texture.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\TexturePool.cpp">
+    <ClCompile Include="Src\ConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -124,9 +154,6 @@
     <ClInclude Include="Src\ConstantBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ConstBufferPool.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Src\ConstValue.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -137,9 +164,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\DDSTextureLoader12.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\DefaultPSO.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\DepthTexture.h">
@@ -157,10 +181,7 @@
     <ClInclude Include="Src\GameTimer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\HeapResourceManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\IConstantBuffer.h">
+    <ClInclude Include="Src\HeapManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\IndexBuffer.h">
@@ -169,13 +190,13 @@
     <ClInclude Include="Src\Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\IPipelineState.h">
+    <ClInclude Include="Src\PSO.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\IResource.h">
+    <ClInclude Include="Src\BaseResource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ITexture.h">
+    <ClInclude Include="Src\Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\MathHelper.h">
@@ -184,22 +205,13 @@
     <ClInclude Include="Src\Mesh.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Pass.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\PassPool.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Src\PSOPool.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\RendererFacade.h">
+    <ClInclude Include="Src\Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\RendererHelper.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\RenderObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\RenderTexture.h">
@@ -208,13 +220,7 @@
     <ClInclude Include="Src\RootSignature.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ShadowMapPSO.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\SkyboxPSO.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Texture.h">
+    <ClInclude Include="Src\CommonTexture.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\TexturePool.h">
@@ -224,6 +230,30 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\LightPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ShaderPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MaterialPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\SSAO.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Shadow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\FrameConstBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

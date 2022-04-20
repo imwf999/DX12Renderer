@@ -1,5 +1,4 @@
-﻿#ifndef RDR_GAMETIMER_H
-#define RDR_GAMETIMER_H
+﻿#pragma once
 
 #include <string>
 
@@ -33,5 +32,3 @@ namespace rdr
 		bool mStopped;
 	};
 }
-
-#endif

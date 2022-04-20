@@ -1,6 +1,10 @@
 ﻿#include "RootSignature.h"
+#include "RendererHelper.h"
+
 namespace rdr
 {
+	RootSignature::~RootSignature() = default;
+
 	void RootSignature::Create(ID3D12Device* pDevice, const std::function<void()>& deletePtrFunc)
 	{
 		//检查是否支持1.1版本的根签名，如果不支持就用1.0版本

@@ -32,12 +32,6 @@ namespace rdr
 				camera.MoveUp(-camera.GetMoveSpeed() * deltaTime);
 			if (GetAsyncKeyState('E') & 0x8000)
 				camera.MoveUp(camera.GetMoveSpeed() * deltaTime);
-
-			//angle += 0.1f * deltaTime;
-			//XMMATRIX R = XMMatrixRotationY(angle);
-			//XMVECTOR lightDir = { 0.57735f, -0.57735f, 0.57735f, 0 };
-			//lightDir = XMVector3TransformNormal(lightDir, R);
-			//XMStoreFloat4(&renderer->light.direction, lightDir);
 		}
 	}
 }

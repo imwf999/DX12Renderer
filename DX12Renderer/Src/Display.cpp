@@ -2,12 +2,12 @@
 #include "RendererHelper.h"
 #include "Game.h"
 #include "RenderTexture.h"
-#include "RendererFacade.h"
+#include "Renderer.h"
 #include "Commond.h"
 #include "DescriptorPool.h"
 namespace rdr
 {
-	Display::Display(IDXGIFactory5* pDxgi, ID3D12Device4* pDev, IDXGIAdapter1* pAda, const RendererFacade& renderer)
+	Display::Display(IDXGIFactory5* pDxgi, ID3D12Device4* pDev, IDXGIAdapter1* pAda, const Renderer& renderer)
 		: pIDXGIFactory5(pDxgi), pd3dDevice(pDev), pAdapter(pAda)
 	{
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = { 0 };
@@ -35,27 +35,20 @@ namespace rdr
 		//创建RTV描述符
 		for (int i = 0; i < swapChainBufferCount; ++i)
 		{
-			pSwapChainBufferArr[i] = std::make_unique<RenderTexture>();
+			pSwapChainBufferArr[i] = std::make_unique<RenderTexture>("BackBuffer" + std::to_string(i));
 			ThrowIfFailed(pSwapChain3->GetBuffer(i, IID_PPV_ARGS(pSwapChainBufferArr[i]->GetDefaultResourceAddressOf())));
 			renderer.GetDescPool()->CreateRTV(this->pSwapChainBufferArr[i]->GetDefaultResource(), nullptr);
 		}
 	}
 
-	Display::~Display()
-	{
-	}
+	Display::~Display() = default;
 
-	void Display::Present(const RendererFacade& renderer)
+	void Display::Present(const Renderer& renderer)
 	{
 		auto* pList = renderer.GetCommond()->GetCmdList();
 		auto* pQueue = renderer.GetCommond()->GetCmdQueue();
 
-		auto tempResourceBarrier2 = CD3DX12_RESOURCE_BARRIER::Transition(
-			pSwapChainBufferArr[currentBackBufferIndex]->GetDefaultResource(),
-			D3D12_RESOURCE_STATE_RENDER_TARGET,
-			D3D12_RESOURCE_STATE_PRESENT);
-
-		pList->ResourceBarrier(1, &tempResourceBarrier2);
+		pSwapChainBufferArr[currentBackBufferIndex]->SetStateFromRenderTargetToPresent(pList);
 		ThrowIfFailed(pList->Close());
 
 		ID3D12CommandList* cmdList2[] = { pList };
@@ -66,30 +59,8 @@ namespace rdr
 		currentBackBufferIndex = pSwapChain3->GetCurrentBackBufferIndex();
 	}
 
-	void Display::SetRenderTarget(const RendererFacade& renderer)
+	void Display::SetSwapChainStateToRenderTarget(const Renderer& renderer)
 	{
-		auto tempResourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			pSwapChainBufferArr[currentBackBufferIndex]->GetDefaultResource(),
-			D3D12_RESOURCE_STATE_PRESENT,
-			D3D12_RESOURCE_STATE_RENDER_TARGET);
-		renderer.GetCommond()->GetCmdList()->ResourceBarrier(1, &tempResourceBarrier);
-	}
-
-	void Display::SetShadowMapTarget(ID3D12GraphicsCommandList* pList, ID3D12Resource* pResource)
-	{
-		auto shadowmapBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			pResource,
-			D3D12_RESOURCE_STATE_GENERIC_READ,
-			D3D12_RESOURCE_STATE_DEPTH_WRITE);
-		pList->ResourceBarrier(1, &shadowmapBarrier);
-	}
-
-	void Display::SetShadowMapResource(ID3D12GraphicsCommandList* pList, ID3D12Resource* pResource)
-	{
-		auto shadowmapBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			pResource,
-			D3D12_RESOURCE_STATE_DEPTH_WRITE,
-			D3D12_RESOURCE_STATE_GENERIC_READ);
-		pList->ResourceBarrier(1, &shadowmapBarrier);
+		pSwapChainBufferArr[currentBackBufferIndex]->SetStateFromPresentToRenderTarget(renderer.GetCommond()->GetCmdList());
 	}
 }

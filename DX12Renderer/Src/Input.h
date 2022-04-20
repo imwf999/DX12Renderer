@@ -1,5 +1,5 @@
-﻿#ifndef RDR_INPUT_H
-#define RDR_INPUT_H
+﻿#pragma once
+
 #include <Windows.h>
 #include <memory>
 #include <functional>
@@ -54,4 +54,3 @@ namespace rdr
 		std::function<void(float dx, float dy)> rotateCameraFunc;
 	};
 }
-#endif

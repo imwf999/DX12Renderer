@@ -1,8 +1,4 @@
-﻿//***************************************************************************************
-// GameTimer.cpp by Frank Luna (C) 2011 All Rights Reserved.
-//***************************************************************************************
-
-#include <windows.h>
+﻿#include <Windows.h>
 #include "GameTimer.h"
 
 namespace rdr
@@ -13,7 +9,7 @@ namespace rdr
 	{
 		__int64 countsPerSec;
 		QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
-		mSecondsPerCount = 1.0 / (double)countsPerSec;
+		mSecondsPerCount = 1.0 / static_cast<double>(countsPerSec);
 	}
 
 	float GameTimer::TotalTime()const
@@ -95,7 +91,6 @@ namespace rdr
 
 	void GameTimer::ShowFrameTime(HWND hwnd, const std::wstring winName)
 	{
-		//TODO:这两个变量放在类里面，有些不需要的控制游戏暂停的变量可以删掉
 		static int frameCnt = 0;
 		static float timeElapsed = 0.0f;
 

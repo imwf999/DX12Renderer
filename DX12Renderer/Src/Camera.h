@@ -1,11 +1,10 @@
-﻿#ifndef RDR_CAMERA_H
-#define  RDR_CAMERA_H
+﻿#pragma once
 #include <DirectXMath.h>
-#include "ConstValue.h"
 using namespace DirectX;
 
 namespace rdr
 {
+	//TODO:这里可以加上重置位置的功能，例如按下F键快速移动到中心位置
 	class Camera
 	{
 	public:
@@ -42,12 +41,6 @@ namespace rdr
 	private:
 		XMFLOAT4X4 viewMatrix;
 		XMFLOAT4X4 projMatrix;
-#ifdef POINTSHADOW
-		XMFLOAT4X4 pointProjMatrix;
-	public:
-		XMMATRIX GetPointProjMatrix() const { return XMLoadFloat4x4(&pointProjMatrix); }
-#endif
-
 
 	private:
 		float fovAngleY;			//垂直视场角
@@ -60,5 +53,3 @@ namespace rdr
 		float moveSpeed;
 	};
 }
-
-#endif

@@ -1,19 +1,25 @@
 ﻿#pragma once
 #include "ConstValue.h"
-#include "IResource.h"
 #include <vector>
+#include "BaseResource.h"
+
 namespace rdr
 {
 	class Mesh;
-	class HeapResourceManager;
+	class Renderer;
+	class HeapManager;
 
-	class IndexBuffer : public IResource
+	class IndexBuffer : public BaseResource
 	{
-		friend HeapResourceManager;
-		friend Mesh;
+	public:
+		IndexBuffer();
+		~IndexBuffer() override;
+
+	public:
+		void CreateBuffer(const Renderer& renderer, const std::vector<uint32_t>& indexVec);
+		const D3D12_INDEX_BUFFER_VIEW& BufferView() const { return indexBufferView; }
 
 	private:
-		std::vector<uint32_t> indexVec;
-		ComPtr<ID3D12Resource> pIntermediateResource;
+		D3D12_INDEX_BUFFER_VIEW indexBufferView;
 	};
 }

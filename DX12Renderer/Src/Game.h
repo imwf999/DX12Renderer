@@ -1,6 +1,4 @@
-﻿#ifndef RDR_GAME_H
-#define RDR_GAME_H
-
+﻿#pragma once
 #include <Windows.h>
 #include <string>
 #include <memory>
@@ -11,7 +9,7 @@
 
 namespace rdr
 {
-	class RendererFacade;
+	class Renderer;
 	class GameTimer;
 	class Input;
 	class Camera;
@@ -29,6 +27,7 @@ namespace rdr
 	public:
 		HINSTANCE GetAppInstance() const { return appInstance; }
 		HWND GetMainWinHandle() const { return mainWinHandle; }
+		const std::shared_ptr<Camera>& GetCamera() const { return pCamera; }
 
 	public:
 		void Initialize(HINSTANCE appIns);
@@ -45,11 +44,9 @@ namespace rdr
 		std::wstring winName;		//窗口名
 
 	private:
-		std::unique_ptr<RendererFacade> pRenderer;
+		std::unique_ptr<Renderer> pRenderer;
 		std::unique_ptr<GameTimer> pGameTimer;
 		std::unique_ptr<Input> pInput;
-		std::unique_ptr<Camera> pCamera;
+		std::shared_ptr<Camera> pCamera;
 	};
 }
-
-#endif

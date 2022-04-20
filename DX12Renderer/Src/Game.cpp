@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 #include "ConstValue.h"
-#include "RendererFacade.h"
+#include "Renderer.h"
 #include "GameTimer.h"
 #include "Input.h"
 #include "Camera.h"
@@ -67,8 +67,8 @@ namespace rdr
 		appInstance = appIns;
 		InitMainWindow();
 		pGameTimer = std::make_unique<GameTimer>();
-		pCamera = std::make_unique<Camera>();
-		pRenderer = std::make_unique<RendererFacade>();
+		pCamera = std::make_shared<Camera>();
+		pRenderer = std::make_unique<Renderer>();
 		pInput = std::make_unique<Input>([&](float dx, float dy) {pCamera->RotateX(dy); pCamera->RotateY(dx); });
 	}
 

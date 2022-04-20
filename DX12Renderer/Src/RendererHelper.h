@@ -1,5 +1,4 @@
-﻿#ifndef RDR_RENDERERHELPER_H
-#define RDR_RENDERERHELPER_H
+﻿#pragma once
 
 #include <comdef.h>
 #include <string>
@@ -7,6 +6,7 @@
 #include <dxgi1_6.h>
 #include <d3d12.h>
 #include <d3dcompiler.h>
+#include <DirectXMath.h>
 
 namespace rdr
 {
@@ -94,6 +94,16 @@ namespace rdr
 		WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.length()), const_cast<char*>(tempStr.c_str()), length, nullptr, nullptr);
 		return tempStr;
 	}
-}
 
-#endif
+	static DirectX::XMMATRIX InverseTranspose(DirectX::CXMMATRIX M)
+	{
+		// Inverse-transpose is just applied to normals.  So zero out 
+		// translation row so that it doesn't get into our inverse-transpose
+		// calculation--we don't want the inverse-transpose of the translation.
+		DirectX::XMMATRIX A = M;
+		A.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+
+		DirectX::XMVECTOR det = DirectX::XMMatrixDeterminant(A);
+		return DirectX::XMMatrixTranspose(DirectX::XMMatrixInverse(&det, A));
+	}
+}

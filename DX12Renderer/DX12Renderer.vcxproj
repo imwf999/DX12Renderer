@@ -164,92 +164,122 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\Shader\CommonData.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\Shader\ShaderMain.hlsl">
+    <None Include="..\Shader\PhongShader.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Shader\SkyBoxMain.hlsl">
+    <None Include="..\Shader\SkyBox.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Shader\RenderToTextureMain.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="..\Shader\ShadowMapMain.hlsl">
+    <None Include="..\Shader\ShadowMap.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\BaseResource.cpp" />
     <ClCompile Include="Src\Camera.cpp" />
     <ClCompile Include="Src\Commond.cpp" />
-    <ClCompile Include="Src\ConstBufferPool.cpp" />
+    <ClCompile Include="Src\ConstantBuffer.cpp" />
     <ClCompile Include="Src\d3dUtil.cpp" />
     <ClCompile Include="Src\DDSTextureLoader12.cpp" />
-    <ClCompile Include="Src\DefaultPSO.cpp" />
     <ClCompile Include="Src\DepthTexture.cpp" />
     <ClCompile Include="Src\DescriptorPool.cpp" />
     <ClCompile Include="Src\Display.cpp" />
+    <ClCompile Include="Src\FrameConstBuffer.cpp" />
     <ClCompile Include="Src\Game.cpp" />
     <ClCompile Include="Src\GameTimer.cpp" />
-    <ClCompile Include="Src\HeapResourceManager.cpp" />
+    <ClCompile Include="Src\GBuffer.cpp" />
+    <ClCompile Include="Src\HeapManager.cpp" />
+    <ClCompile Include="Src\IndexBuffer.cpp" />
     <ClCompile Include="Src\Input.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Material.cpp" />
+    <ClCompile Include="Src\MaterialPool.cpp" />
     <ClCompile Include="Src\MathHelper.cpp" />
     <ClCompile Include="Src\Mesh.cpp" />
-    <ClCompile Include="Src\Pass.cpp" />
-    <ClCompile Include="Src\PassPool.cpp" />
-    <ClCompile Include="Src\PSOPool.cpp" />
-    <ClCompile Include="Src\RendererFacade.cpp" />
+    <ClCompile Include="Src\PSO.cpp" />
+    <ClCompile Include="Src\Renderer.cpp" />
     <ClCompile Include="Src\RenderTexture.cpp" />
     <ClCompile Include="Src\RootSignature.cpp" />
-    <ClCompile Include="Src\ShadowMapPSO.cpp" />
-    <ClCompile Include="Src\SkyboxPSO.cpp" />
+    <ClCompile Include="Src\Shader.cpp" />
+    <ClCompile Include="Src\ShaderPool.cpp" />
+    <ClCompile Include="Src\CommonTexture.cpp" />
+    <ClCompile Include="Src\Shadow.cpp" />
+    <ClCompile Include="Src\SSAO.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
     <ClCompile Include="Src\TexturePool.cpp" />
+    <ClCompile Include="Src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera.h" />
     <ClInclude Include="Src\Commond.h" />
     <ClInclude Include="Src\ConstantBuffer.h" />
-    <ClInclude Include="Src\ConstBufferPool.h" />
     <ClInclude Include="Src\ConstValue.h" />
     <ClInclude Include="Src\d3dUtil.h" />
     <ClInclude Include="Src\d3dx12.h" />
     <ClInclude Include="Src\DDSTextureLoader12.h" />
-    <ClInclude Include="Src\DefaultPSO.h" />
     <ClInclude Include="Src\DepthTexture.h" />
     <ClInclude Include="Src\DescriptorPool.h" />
     <ClInclude Include="Src\Display.h" />
     <ClInclude Include="Src\Game.h" />
     <ClInclude Include="Src\GameTimer.h" />
-    <ClInclude Include="Src\HeapResourceManager.h" />
-    <ClInclude Include="Src\IConstantBuffer.h" />
+    <ClInclude Include="Src\GBuffer.h" />
+    <ClInclude Include="Src\HeapManager.h" />
     <ClInclude Include="Src\IndexBuffer.h" />
     <ClInclude Include="Src\Input.h" />
-    <ClInclude Include="Src\IPipelineState.h" />
-    <ClInclude Include="Src\IResource.h" />
-    <ClInclude Include="Src\ITexture.h" />
+    <ClInclude Include="Src\FrameConstBuffer.h" />
+    <ClInclude Include="Src\PSO.h" />
+    <ClInclude Include="Src\BaseResource.h" />
+    <ClInclude Include="Src\Texture.h" />
     <ClInclude Include="Src\LightPool.h" />
+    <ClInclude Include="Src\Material.h" />
+    <ClInclude Include="Src\MaterialPool.h" />
     <ClInclude Include="Src\MathHelper.h" />
     <ClInclude Include="Src\Mesh.h" />
-    <ClInclude Include="Src\Pass.h" />
-    <ClInclude Include="Src\PassPool.h" />
     <ClInclude Include="Src\PSOPool.h" />
-    <ClInclude Include="Src\RendererFacade.h" />
+    <ClInclude Include="Src\Renderer.h" />
     <ClInclude Include="Src\RendererHelper.h" />
-    <ClInclude Include="Src\RenderObject.h" />
     <ClInclude Include="Src\RenderTexture.h" />
     <ClInclude Include="Src\RootSignature.h" />
-    <ClInclude Include="Src\ShadowMapPSO.h" />
-    <ClInclude Include="Src\SkyboxPSO.h" />
-    <ClInclude Include="Src\Texture.h" />
+    <ClInclude Include="Src\Shader.h" />
+    <ClInclude Include="Src\ShaderPool.h" />
+    <ClInclude Include="Src\CommonTexture.h" />
+    <ClInclude Include="Src\Shadow.h" />
+    <ClInclude Include="Src\SSAO.h" />
     <ClInclude Include="Src\TexturePool.h" />
     <ClInclude Include="Src\VertexBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shader\CommonFunction.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\Shader\DrawNormal.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\Shader\SSAO.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shader\SSAOBlur.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shader\CommonData.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

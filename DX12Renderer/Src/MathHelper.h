@@ -8,13 +8,47 @@
 
 #include <Windows.h>
 #include <DirectXMath.h>
+#include <cmath>
 #include <cstdint>
+#include <vector>
 
 namespace rdr
 {
-	class MathHelper
+	class Math
 	{
 	public:
+		static constexpr int MaxBlurRadius = 5;
+
+		static std::vector<float> CalcGaussWeights(float sigma)
+		{
+			float twoSigma2 = 2.0f * sigma * sigma;
+
+			int blurRadius = static_cast<int>(std::ceil(2.0f * sigma));
+
+			assert(blurRadius <= MaxBlurRadius);
+
+			std::vector<float> weights;
+			weights.resize(2 * blurRadius + 1);
+
+			float weightSum = 0.0f;
+
+			for (int i = -blurRadius; i <= blurRadius; ++i)
+			{
+				float x = (float)i;
+
+				weights[i + blurRadius] = expf(-x * x / twoSigma2);
+
+				weightSum += weights[i + blurRadius];
+			}
+
+			for (int i = 0; i < weights.size(); ++i)
+			{
+				weights[i] /= weightSum;
+			}
+
+			return weights;
+		}
+
 		// Returns random float in [0, 1).
 		static float RandF()
 		{
@@ -90,7 +124,7 @@ namespace rdr
 			return I;
 		}
 
-		const static DirectX::XMFLOAT4X4& ShadowTexMatrix()
+		const static DirectX::XMFLOAT4X4& TextureMatrix()
 		{
 			static DirectX::XMFLOAT4X4 T(
 				0.5f, 0.0f, 0.0f, 0.0f,

@@ -1,70 +1,67 @@
-﻿//#include "RenderTarget.h"
-//#include "Renderer.h"
-//#include "DescriptorPool.h"
-//#include <d3d12.h>
-//#include "RendererHelper.h"
-//#include "d3dx12.h"
-//#include "DDSTextureLoader12.h"
-//#include "HeapResourceManager.h"
-//#include <DirectXColors.h>
-//namespace rdr {
-//
-//void RenderTarget::InitializeSrv(const Renderer& renderer)
-//{
-//	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-//	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-//	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-//	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-//	srvDesc.Texture2D.MipLevels = pDefaultTexture->GetDesc().MipLevels;
-//	renderer.GetDescriptorPool()->CreateSRV(pDefaultTexture.Get(), &srvDesc);
-//	this->indexInSrv = renderer.GetDescriptorPool()->GetCurrentSrvIndex();
-//}
-//
-//void RenderTarget::InitializeRtv(const Renderer& renderer)
-//{
-//	renderer.GetDescriptorPool()->CreateRTV(pDefaultTexture.Get(), nullptr);
-//}
-//
-//void RenderTarget::Initialize(const std::wstring& path, const Renderer& renderer)
-//{
-//	D3D12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Tex2D(
-//		DXGI_FORMAT_R8G8B8A8_UNORM,
-//		global_WindowWidth,
-//		global_WindowHeight,
-//		1,
-//		1,
-//		1,
-//		0,
-//		 D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
-//
-//	this->LoadResourceToGPU(renderer, desc);
-//	InitializeSrv(renderer);
-//	InitializeRtv(renderer);
-//}
-//
-//void RenderTarget::LoadResourceToGPU(const Renderer& renderer, const D3D12_RESOURCE_DESC& resourceDesc)
-//{
-//	D3D12_CLEAR_VALUE stClear = {};
-//	stClear.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-//	const float tempArr[4] = { Colors::LightSteelBlue.f[0], Colors::LightSteelBlue.f[1], Colors::LightSteelBlue.f[2], Colors::LightSteelBlue.f[3] };
-//	memcpy(&stClear.Color, &tempArr, 4 * sizeof(float));
-//
-//	renderer.GetHeapResData()->CreateResourceInDefaultHeap(
-//		renderer.GetHeapResData()->GetDefaultHeapOffset(),
-//		&resourceDesc,
-//		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE | D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE,
-//		&stClear,
-//		pDefaultTexture);
-//}
-//
-//}
+﻿#include "RenderTexture.h"
+#include "Commond.h"
+#include "Renderer.h"
+#include "HeapManager.h"
+#include "DescriptorPool.h"
+#include "ConstValue.h"
 
-#include "RenderTexture.h"
-#include "RendererFacade.h"
 namespace rdr
 {
-	RenderTexture::RenderTexture(const RendererFacade& renderer, DXGI_FORMAT format, uint32_t width, uint32_t height, unsigned int type)
+	RenderTexture::RenderTexture(const std::string& InName, const Renderer& renderer, DXGI_FORMAT format, uint32_t width, uint32_t height)
 	{
-		//TODO:
+		name = InName;
+
+		SetResourceDescAsTexture(format, width, height, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
+
+		renderer.GetResMgr()->CreateTextureInDefaultHeap(this,renderer.GetCommond()->GetCmdList());
+
+		CreateRTV(renderer, format);
+		CreateSRV(renderer, format);
+	}
+
+	void RenderTexture::SetStateFromPresentToRenderTarget(ID3D12GraphicsCommandList* pList) const
+	{
+		auto tempResourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			pResource.Get(),
+			D3D12_RESOURCE_STATE_PRESENT,
+			D3D12_RESOURCE_STATE_RENDER_TARGET);
+		pList->ResourceBarrier(1, &tempResourceBarrier);
+	}
+
+	void RenderTexture::SetStateFromRenderTargetToPresent(ID3D12GraphicsCommandList* pList) const
+	{
+		auto tempResourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			pResource.Get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_PRESENT);
+		pList->ResourceBarrier(1, &tempResourceBarrier);
+	}
+
+	void RenderTexture::SetStateFromRenderTargetToShaderResource(ID3D12GraphicsCommandList* pList) const
+	{
+		auto tempResourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			pResource.Get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_GENERIC_READ);
+		pList->ResourceBarrier(1, &tempResourceBarrier);
+	}
+
+	void RenderTexture::SetStateFromShaderResourceToRenderTarget(ID3D12GraphicsCommandList* pList) const
+	{
+		auto tempResourceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			pResource.Get(),
+			D3D12_RESOURCE_STATE_GENERIC_READ,
+			D3D12_RESOURCE_STATE_RENDER_TARGET);
+		pList->ResourceBarrier(1, &tempResourceBarrier);
+	}
+
+	void RenderTexture::CreateRTV(const Renderer& renderer, DXGI_FORMAT format)
+	{
+		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+		rtvDesc.Format = format;
+		rtvDesc.Texture2D.MipSlice = 0;
+		rtvDesc.Texture2D.PlaneSlice = 0;
+		this->rtvIndex = renderer.GetDescPool()->CreateRTV(pResource.Get(), &rtvDesc);
 	}
 }

@@ -1,23 +1,34 @@
-﻿#ifndef RDR_RENDERTEXTURE_H
-#define RDR_RENDERTEXTURE_H
+﻿#pragma once
+#include <string>
 #include "ConstValue.h"
-#include "ITexture.h"
+#include "Texture.h"
+
 namespace rdr
 {
-	class RendererFacade;
+	class Renderer;
 
-	class RenderTexture : public ITexture
+	class RenderTexture : public Texture
 	{
 	public:
-		RenderTexture() = default;
-		RenderTexture(const RendererFacade& renderer, DXGI_FORMAT format, uint32_t width, uint32_t height, unsigned int type);
-		virtual ~RenderTexture() = default;
+		RenderTexture(const std::string& InName) { name = InName; }
+		RenderTexture(const std::string& InName, const Renderer& renderer, DXGI_FORMAT format, uint32_t width = global_WindowWidth, uint32_t height = global_WindowHeight);
+		~RenderTexture() override = default;
 
 	public:
 		uint32_t GetRtvIndex() const { return rtvIndex; }
+		void SetStateFromPresentToRenderTarget(ID3D12GraphicsCommandList* pList) const;
+		void SetStateFromRenderTargetToPresent(ID3D12GraphicsCommandList* pList) const;
+		void SetStateFromRenderTargetToShaderResource(ID3D12GraphicsCommandList* pList) const;
+		void SetStateFromShaderResourceToRenderTarget(ID3D12GraphicsCommandList* pList) const;
 
 	private:
-		uint32_t rtvIndex;
+		void CreateRTV(const Renderer& renderer, DXGI_FORMAT format);
+
+	public:
+		static constexpr DXGI_FORMAT ScreenNormalMapFormat = DXGI_FORMAT_R16G16B16A16_FLOAT;
+		static constexpr DXGI_FORMAT SsaoMapFormat = DXGI_FORMAT_R16_UNORM;
+
+	private:
+		uint32_t rtvIndex = 0;
 	};
 }
-#endif

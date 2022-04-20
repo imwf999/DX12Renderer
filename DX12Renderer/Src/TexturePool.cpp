@@ -1,60 +1,83 @@
 ﻿#include "TexturePool.h"
-#include "Texture.h"
-#include "RendererFacade.h"
+#include "CommonTexture.h"
+#include "Renderer.h"
 #include "DepthTexture.h"
 #include "RendererHelper.h"
+#include "RenderTexture.h"
 #include <filesystem>
 
 namespace rdr
 {
-	TexturePool::TexturePool(const RendererFacade& renderer)
+	//TODO:这个读取纹理的方式还要改
+	TexturePool::TexturePool(const Renderer& renderer)
 	{
+		using CommonTexPtr = std::shared_ptr<CommonTexture>;
+		using DepthTexPtr = std::shared_ptr<DepthTexture>;
+		using RenderTexPtr = std::shared_ptr<RenderTexture>;
+
+		//读取文件夹下的所有diffuse和normal纹理
 		std::string path = "Texture\\pbr";
 		auto result = std::filesystem::directory_iterator(path);
-		std::wstring texturePath;
 		for (auto& entry : result)
 		{
-			texturePath = entry.path();
+			std::wstring texturePath = entry.path();
 			auto dotLoc = texturePath.find_last_of(L'.');
 			if(texturePath.substr(dotLoc + 1, texturePath.size() - dotLoc - 1) != L"dds")
 				continue;
-			std::unique_ptr<Texture> tex = std::make_unique<Texture>(texturePath, renderer, true);
 			size_t begin = texturePath.find_last_of('\\');
-			size_t end = texturePath.find_last_of('_');
+			size_t end = texturePath.find_last_of('.');
 			std::string name = WstrToStr(texturePath.substr(begin + 1, end - begin - 1));
-			if (texturePath[dotLoc - 1] == L'e')
-				diffuseTexMap[name] = std::move(tex);
-			else if (texturePath[dotLoc - 1] == L'l')
-				normalTexMap[name] = std::move(tex);
+			CommonTexPtr ptrTexture = std::make_shared<CommonTexture>(name);
+			ptrTexture->CreateTextureFromFlie(texturePath, renderer, true);
+			AddTexture(ptrTexture);
 		}
-		defaultDiffuseTex = std::make_unique<Texture>(L"Texture\\default\\default_diffuse(2).dds", renderer, true);
-		defaultNormalTex = std::make_unique<Texture>(L"Texture\\default\\default_normal(2).dds", renderer, true);
-		std::unique_ptr<Texture> pSkybox = std::make_unique<Texture>(L"Texture\\cubemap.dds", renderer, false);
-		cubeMapVec.push_back(std::move(pSkybox));
 
-		std::unique_ptr<DepthTexture> depthTex = std::make_unique<DepthTexture>(renderer);
-		depthTexVec.push_back(std::move(depthTex));
+		//加载默认纹理
+		CommonTexPtr ptrDefaultDiffuse = std::make_shared<CommonTexture>("DefaultDiffuse");
+		ptrDefaultDiffuse->CreateTextureFromFlie(L"Texture\\default\\default_diffuse.dds", renderer, true);
+		CommonTexPtr ptrDefaultNormal = std::make_shared<CommonTexture>("DefaultNormal");
+		ptrDefaultNormal->CreateTextureFromFlie(L"Texture\\default\\default_normal.dds", renderer, true);
+		AddTexture(ptrDefaultDiffuse);
+		AddTexture(ptrDefaultNormal);
 
-		std::unique_ptr<DepthTexture> shadowMap = std::make_unique<DepthTexture>(
-			renderer,
-			DXGI_FORMAT_D24_UNORM_S8_UINT,
-			global_WindowWidth,
-			global_WindowHeight,
-			true);
-		depthTexVec.push_back(std::move(shadowMap));
+		//用于天空盒的立方体纹理
+		CommonTexPtr pSkybox = std::make_shared<CommonTexture>("SkyBox");
+		pSkybox->CreateTextureFromFlie(L"Texture\\cubemap.dds", renderer, false);
+		AddTexture(pSkybox);
 
-#ifdef POINTSHADOW
-			std::unique_ptr<DepthTexture> pointShadowMap = std::make_unique<DepthTexture>(
-				renderer,
-				DXGI_FORMAT_D24_UNORM_S8_UINT,
-				global_WindowWidth,
-				global_WindowHeight,
-				false);
-			depthTexVec.push_back(std::move(pointShadowMap));
-#endif
+		//用于最后一趟pass绘制场景所需的的深度纹理
+		DepthTexPtr depthTex = std::make_shared<DepthTexture>("PhongDepthTex");
+		depthTex->Create2D(renderer, DepthTexture::DefaultFormat, global_WindowWidth, global_WindowHeight);
+		AddTexture(depthTex);
+
+		//用于阴影贴图的深度纹理
+		DepthTexPtr shadowMap = std::make_shared<DepthTexture>("ShadowMapTex");
+		shadowMap->Create2D(renderer, DepthTexture::ShadowFormat, global_ShadowMapWidth, global_ShadowMapHeight);
+		AddTexture(shadowMap);
+
+		//用于存储G-Buffer中的像素法线
+		RenderTexPtr normalTex = std::make_shared<RenderTexture>("ScreenNormal", renderer, RenderTexture::ScreenNormalMapFormat);
+		AddTexture(normalTex);
+
+		//用于存储G-Buffer中的像素深度
+		DepthTexPtr ssaoDepthTex = std::make_shared<DepthTexture>("SsaoDepthTex");
+		ssaoDepthTex->Create2D(renderer, DepthTexture::ShadowFormat, global_WindowWidth, global_WindowHeight);
+		AddTexture(ssaoDepthTex);
+
+		//用于SSAO图，用完后这张纹理会重复利用，和下面的SsaoBlur纹理一起使用。
+		RenderTexPtr ssaoTex = std::make_shared<RenderTexture>("SsaoTex", renderer, RenderTexture::SsaoMapFormat, global_SSAOMapWidth, global_SSAOMapHeight);
+		AddTexture(ssaoTex);
+
+		//存储模糊后的SSAO纹理，模糊过程有三次循环，共6趟渲染，上一个作为输入，这个作为输出，然后下一趟又把这个作为输入，上一张纹理作为输出，以此类推
+		RenderTexPtr ssaoBlurTex = std::make_shared<RenderTexture>("SsaoBlur", renderer, RenderTexture::SsaoMapFormat, global_SSAOMapWidth, global_SSAOMapHeight);
+		AddTexture(ssaoBlurTex);
+
+		//用于SSAO中的随机向量纹理
+		CommonTexPtr randomVecTex = std::make_shared<CommonTexture>("RandomVecTex");
+		randomVecTex->CreateRandomTexture(renderer, CommonTexture::RandomVectorFormat, global_SSAORandomVecMapWidth, global_SSAORandomVecMapHeight, true);
+		AddTexture(randomVecTex);
+
 	}
 
-	TexturePool::~TexturePool()
-	{
-	}
+	TexturePool::~TexturePool() = default;
 }

@@ -19,17 +19,14 @@ namespace rdr
 	public:
 		LightPool()
 		{
-			AddPointLight({ -1190, 630, 490 }, Red);
-			AddPointLight({ 1190, 630, 490 }, Green);
-			AddPointLight({ -1190, 630, -490 }, Purple);
-			AddPointLight({ 1190, 630, -490 }, Blue);
-			AddPointLight({ -1190, 200, 490 });
-			AddPointLight({ 1190, 200, 490 });
-			AddPointLight({ -1190, 200, -490 });
-			AddPointLight({ 1190, 200, -490 });
-#ifdef POINTSHADOW
-			AddPointLight(MainPointPosition, White, 100, 2000);
-#endif
+			//AddPointLight({ -1190, 630, 490 }, Red);
+			//AddPointLight({ 1190, 630, 490 }, Green);
+			//AddPointLight({ -1190, 630, -490 }, Purple);
+			//AddPointLight({ 1190, 630, -490 }, Blue);
+			//AddPointLight({ -1190, 200, 490 });
+			//AddPointLight({ 1190, 200, 490 });
+			//AddPointLight({ -1190, 200, -490 });
+			//AddPointLight({ 1190, 200, -490 });
 			AddDirectionalLight(SunDirection);
 		}
 		LightPool(const std::vector<Light>& pointLights, const std::vector<Light>& directionalLighs)
@@ -67,7 +64,7 @@ namespace rdr
 		const Light& GetDirectionalLight(size_t index) const { return directionalLightVec[index]; }
 
 	public:
-		static constexpr DirectX::XMFLOAT4 SunDirection = { 0.0f, -0.8f, 0.3f, 0 };		//平行光方向
+		static constexpr DirectX::XMFLOAT4 SunDirection = { 0.0f, -0.75f, 0.33f, 0 };		//平行光方向
 		static constexpr DirectX::XMFLOAT3 MainPointPosition = { 0, 600, 0 };		//主点光源位置
 		static constexpr DirectX::XMFLOAT3 Red = { 1, 0, 0 };
 		static constexpr DirectX::XMFLOAT3 Green = { 0, 1, 0 };

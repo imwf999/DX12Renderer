@@ -1,5 +1,5 @@
-﻿#ifndef RDR_DESCRIPTORPOOL_H
-#define RDR_DESCRIPTORPOOL_H
+﻿#pragma once
+
 #include <unordered_map>
 #include <memory>
 #include <d3d12.h>
@@ -71,17 +71,20 @@ namespace rdr
 	public:
 		struct DescriptorPoolInitializeDesc;
 	public:
-		DescriptorPool(Microsoft::WRL::ComPtr<ID3D12Device4> device, DescriptorPoolInitializeDesc desc);
+		DescriptorPool(ComPtr<ID3D12Device4> device, DescriptorPoolInitializeDesc desc);
 		DescriptorPool(const DescriptorPool&) = delete;
 		DescriptorPool& operator= (const DescriptorPool&) = delete;
 		~DescriptorPool();
 
 	public:
 		uint32_t CreateSRV(ID3D12Resource* pResource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc);
-		uint32_t CreateUAV();	//TODO:
+		uint32_t CreateUAV() { return 0; }	//TODO:UAV待添加
 		uint32_t CreateRTV(ID3D12Resource* pResource, const D3D12_RENDER_TARGET_VIEW_DESC* desc);
 		uint32_t CreateDSV(ID3D12Resource* pResource, const D3D12_DEPTH_STENCIL_VIEW_DESC* desc);
 		uint32_t CreateSampler(const D3D12_SAMPLER_DESC* desc);
+
+	private:
+		void CreateSamplers();
 
 	public:
 		void SetDescriptorHeap(ID3D12GraphicsCommandList* list)
@@ -132,5 +135,3 @@ namespace rdr
 		ComPtr<ID3D12Device4> pDevice;
 	};
 }
-
-#endif

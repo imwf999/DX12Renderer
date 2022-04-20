@@ -1,19 +1,15 @@
-﻿//***************************************************************************************
-// MathHelper.cpp by Frank Luna (C) 2011 All Rights Reserved.
-//***************************************************************************************
-
-#include "MathHelper.h"
-#include <float.h>
+﻿#include "MathHelper.h"
+#include <cfloat>
 #include <cmath>
 
 using namespace DirectX;
 
 namespace rdr
 {
-	const float MathHelper::Infinity = FLT_MAX;
-	const float MathHelper::Pi = 3.1415926535f;
+	constexpr float Math::Infinity = FLT_MAX;
+	constexpr float Math::Pi = 3.1415926535f;
 
-	float MathHelper::AngleFromXY(float x, float y)
+	float Math::AngleFromXY(float x, float y)
 	{
 		float theta = 0.0f;
 
@@ -35,7 +31,7 @@ namespace rdr
 		return theta;
 	}
 
-	XMVECTOR MathHelper::RandUnitVec3()
+	XMVECTOR Math::RandUnitVec3()
 	{
 		XMVECTOR One = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		XMVECTOR Zero = XMVectorZero();
@@ -44,7 +40,7 @@ namespace rdr
 		while (true)
 		{
 			// Generate random point in the cube [-1,1]^3.
-			XMVECTOR v = XMVectorSet(MathHelper::RandF(-1.0f, 1.0f), MathHelper::RandF(-1.0f, 1.0f), MathHelper::RandF(-1.0f, 1.0f), 0.0f);
+			XMVECTOR v = XMVectorSet(Math::RandF(-1.0f, 1.0f), Math::RandF(-1.0f, 1.0f), Math::RandF(-1.0f, 1.0f), 0.0f);
 
 			// Ignore points outside the unit sphere in order to get an even distribution 
 			// over the unit sphere.  Otherwise points will clump more on the sphere near 
@@ -57,7 +53,7 @@ namespace rdr
 		}
 	}
 
-	XMVECTOR MathHelper::RandHemisphereUnitVec3(XMVECTOR n)
+	XMVECTOR Math::RandHemisphereUnitVec3(XMVECTOR n)
 	{
 		XMVECTOR One = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
 		XMVECTOR Zero = XMVectorZero();
@@ -66,7 +62,7 @@ namespace rdr
 		while (true)
 		{
 			// Generate random point in the cube [-1,1]^3.
-			XMVECTOR v = XMVectorSet(MathHelper::RandF(-1.0f, 1.0f), MathHelper::RandF(-1.0f, 1.0f), MathHelper::RandF(-1.0f, 1.0f), 0.0f);
+			XMVECTOR v = XMVectorSet(Math::RandF(-1.0f, 1.0f), Math::RandF(-1.0f, 1.0f), Math::RandF(-1.0f, 1.0f), 0.0f);
 
 			// Ignore points outside the unit sphere in order to get an even distribution 
 			// over the unit sphere.  Otherwise points will clump more on the sphere near 

@@ -1,52 +1,51 @@
-﻿#ifndef RDR_TEXTUREPOOL_H
-#define RDR_TEXTUREPOOL_H
+﻿#pragma once
+
 #include <memory>
 #include <vector>
 #include <unordered_map>
 #include <Windows.h>
 #include "DepthTexture.h"
+#include "ConstValue.h"
+
 namespace rdr
 {
 	class Texture;
-	class ITexture;
-	class RendererFacade;
+	class CommonTexture;
+	class Renderer;
+	class RenderTexture;
+
+	using TexSharedPtr = std::shared_ptr<Texture>;
 
 	class TexturePool
 	{
 	public:
-		TexturePool(const RendererFacade& renderer);
+		TexturePool(const Renderer& renderer);
 		~TexturePool();
 
-		Texture* GetDiffuseTex(const std::string& name) const
+		const TexSharedPtr& GetTexture(const std::string& name) const
 		{
-			auto it = diffuseTexMap.find(name);
-			if (it != diffuseTexMap.end())
-				return it->second.get();
-			return defaultDiffuseTex.get();
+			const auto& index = TextureMap.find(name);
+			if (index == TextureMap.end())
+				throw "No Such Texture";
+			return index->second;
 		}
 
-		Texture* GetNormalTex(const std::string& name) const
+		void AddTexture(const TexSharedPtr& ptrTex)
 		{
-			auto it = normalTexMap.find(name);
-			if (it != normalTexMap.end())
-				return it->second.get();
-			return defaultNormalTex.get();
+			const std::string& tName = ptrTex->GetName();
+			const auto& tIndex = TextureMap.find(tName);
+			if (tIndex != TextureMap.cend())
+				throw "Two Texture Have The Same Name";
+			TextureMap.insert({ tName, ptrTex });
 		}
 
-		Texture* GetDefaultDiffTex() const { return defaultDiffuseTex.get(); }
-		Texture* GetDefaultNorTex() const { return defaultNormalTex.get(); }
-		size_t GetDiffTexNum() const { return diffuseTexMap.size(); }
-		size_t GetNorTexNum() const { return normalTexMap.size(); }
-		ID3D12Resource* GetMainShadowMap() const { return depthTexVec[1]->GetDefaultResource(); }
-		ID3D12Resource* GetPointShadowMap() const { return depthTexVec[2]->GetDefaultResource(); }
+		bool ContainTexture(const std::string& name)
+		{
+			auto index = TextureMap.find(name);
+			return index != TextureMap.end();
+		}
 
 	private:
-		std::vector<std::unique_ptr<Texture>> cubeMapVec;
-		std::unordered_map<std::string, std::unique_ptr<Texture>> diffuseTexMap;
-		std::unordered_map<std::string, std::unique_ptr<Texture>> normalTexMap;
-		std::vector < std::unique_ptr<DepthTexture>> depthTexVec;
-		std::unique_ptr<Texture> defaultDiffuseTex;
-		std::unique_ptr<Texture> defaultNormalTex;
+		std::unordered_map<std::string, TexSharedPtr> TextureMap;
 	};
 }
-#endif
