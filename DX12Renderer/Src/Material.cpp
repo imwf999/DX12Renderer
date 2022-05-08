@@ -7,7 +7,7 @@ namespace rdr
 {
 	using namespace DirectX;
 
-	void Material::CreateConstBuffer(const Renderer& renderer, const std::vector<std::pair<std::string, std::any>>& InBufferData)
+	void Material::BindCBuffer(const Renderer& renderer, const std::vector<std::pair<std::string, std::any>>& InBufferData)
 	{
 		using Element = CBufferElement;
 		size_t tLength = InBufferData.size();
@@ -30,7 +30,7 @@ namespace rdr
 		};
 
 		uint32_t tPreElementOffset = 0;
-		for(size_t index = 0; index < tLength; ++index)
+		for(uint32_t index = 0; index < tLength; ++index)
 		{
 			Element element;
 			element.name = InBufferData[index].first;
@@ -60,5 +60,11 @@ namespace rdr
 	{
 		const auto& ptrTex = renderer.GetTexPool()->GetTexture(InName);
 		texVec.push_back(ptrTex);
+	}
+
+	void Material::UpdateConstData(const std::string& InName, const void* pData, uint32_t size)
+	{
+		const auto& element = CBufferElementMap[InName];
+		ptrConstBuffer->Update(element.offset, pData, size);
 	}
 }

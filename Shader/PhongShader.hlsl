@@ -1,6 +1,6 @@
 #include "CommonFunction.hlsl"
 
-#define SSAO 1
+#define SSAO 0
 
 struct Light
 {
@@ -33,54 +33,6 @@ cbuffer MaterialData : register(b1)
     float globalShininess;
     Light globalDirectionalLight;
 };
-
-float3 ComputeDirectLight(float3 lightColor, float3 lightDir, float3 normal)
-{
-    return lightColor * max(0, dot(lightDir, normal)); //入射光量乘以朗伯余弦定理得到的直射光量
-}
-
-float3 ComputeDiffuse(float3 lightColor, float3 lightDir, float3 normal, float4 diffuseAbedo)
-{
-    return ComputeDirectLight(lightColor, lightDir, normal) * diffuseAbedo.rgb; //直射光量乘以漫反射反照率得到漫反射光量
-}
-
-float3 ComputeSpecular(float3 lightColor, float3 lightDir, float3 posW, float3 normal, float m)
-{
-    float3 viewDir = normalize(posW - globalEyePostion.xyz); 
-
-    float3 fresnelRF = globalFresnelR0 + (1 - globalFresnelR0) * pow(1 - saturate(dot(lightDir, normal)), 5); //菲涅尔系数
-
-    float3 halfDir = normalize(lightDir + viewDir); //直射入眼睛的那部分光线和人眼之间的微平面法线
-    float roughnessFactor = (m + 8) * pow(max(dot(normal, halfDir), 0), m) / 8; //粗糙度系数
-
-    float3 specAbedo = fresnelRF * roughnessFactor;
-    specAbedo = specAbedo / (specAbedo + 1.0f); //有些高光因子会大于1，如果没有这个处理的话有些像素会呈现纯白色
-    return ComputeDirectLight(lightColor, lightDir, normal) * specAbedo; //直射光量乘以菲涅尔系数乘以粗糙度得到高光光量
-}
-
-//世界空间下计算法线向量,传入的法线是世界空间下的法线
-float3 ComputePointLight(Light pointLight, float3 posW, float3 normal, float m, float4 diffuseAbedo)
-{
-    float3 lightDir = pointLight.position - posW;
-    float lightDistance = length(lightDir);
-    if (lightDistance > pointLight.fallOffEnd)
-        return 0.0f;
-    float fallFactor = saturate((pointLight.fallOffEnd - lightDistance) / (pointLight.fallOffEnd - pointLight.fallOffStart));
-
-    lightDir /= lightDistance;
-    float3 diffuse = ComputeDiffuse(pointLight.lightColor, lightDir, normal, diffuseAbedo);
-    float3 specular = ComputeSpecular(pointLight.lightColor, lightDir, posW, normal, m);
-
-    return (diffuse + specular) * fallFactor;
-}
-
-float3 ComputeDirectionalLight(Light directionLight, float3 posW, float3 normal, float m, float4 diffuseAbedo)
-{
-    float3 lightDir = -directionLight.direction.xyz;
-    float3 diffuse = ComputeDiffuse(directionLight.lightColor, lightDir, normal, diffuseAbedo);
-    float3 specular = ComputeSpecular(directionLight.lightColor, lightDir, posW, normal, m);
-    return diffuse + specular;
-}
 
 float CalculateShadowFactor(float4 shadowPosH)
 {
@@ -173,7 +125,7 @@ VertexOutput VSMain(VertexInput vin)
     vout.pos = mul(vout.worldPos, globalViewProj);
 
     vout.uv = vin.uv;
-    vout.shadowPosH = mul(float4(vin.pos, 1.0f), globalShadowMVP);
+    vout.shadowPosH = mul(float4(vin.pos, 1.0f), globalShadowMVP);  //阴影变换矩阵在CPU端已经进行了纹理变换
 
 #if SSAO
     vout.ssaoPosH = mul(vout.worldPos, globalViewProj);
@@ -215,7 +167,8 @@ float4 PSMain(VertexOutput pin) : SV_TARGET
 
     float3 directionalLight = { 0.0f, 0.0f, 0.0f };
 
-    directionalLight = ComputeDirectionalLight(globalDirectionalLight, pin.worldPos.xyz, worldNormal, m, diffuseAbedo);
+    float3 lightDir = globalDirectionalLight.direction.xyz;
+    directionalLight = ComputeDirectionalLight(lightDir, globalDirectionalLight.lightColor, pin.worldPos.xyz, worldNormal, m, diffuseAbedo, globalFresnelR0);
 
     directionalLight *= shadowFactor;
     

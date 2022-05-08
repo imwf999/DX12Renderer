@@ -114,7 +114,7 @@ namespace rdr
 			{
 				pGameTimer->Tick();
 				pGameTimer->ShowFrameTime(mainWinHandle, winName);
-				pInput->Update(*pGameTimer.get(), *pCamera.get());
+				pInput->Update(*pGameTimer.get(), *pCamera.get(), *pRenderer);
 				pCamera->Update();
 				pRenderer->Update(*pCamera.get());
 				pRenderer->Draw();

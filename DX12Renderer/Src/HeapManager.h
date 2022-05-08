@@ -38,6 +38,6 @@ namespace rdr
 		//GetRequiredIntermediateSize函数得到的是上传堆需要的空间，如果直接把这个值作为默认堆向前的偏移值会出现一些创建的纹理有重叠
 		//所以需要一个倍率，在GetRequiredIntermediateSize返回值的基础上乘以这个倍率，再作为defaultHeapOffset向前的偏移值。
 		//目前定为1.1没有问题，后面加入的纹理种类多了之后可能还会出问题，还需要调整
-		static constexpr float OffsetRate = 1.1f;
+		static constexpr float OffsetRate = 1.2f;
 	};
 }

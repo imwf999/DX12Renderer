@@ -23,6 +23,7 @@ namespace rdr
 	class SSAOMap;
 	class GBuffer;
 	class FrameConstBuffer;
+	class Material;
 
 	class Renderer
 	{
@@ -42,7 +43,7 @@ namespace rdr
 		ShaderPool* GetShaderPool() const { return pShaderPool.get(); }
 		MaterialPool* GetMaterialPool() const { return pMaterialPool.get(); }
 		FrameConstBuffer* GetFrameCBuffer() const { return ptrFrameCBuffer.get(); }
-		const std::vector<std::unique_ptr<Mesh>>& GetMeshVec() const { return meshVec; }
+		const std::vector<std::shared_ptr<Mesh>>& GetMeshVec() const { return meshVec; }
 
 	private:
 		void DrawMesh(ID3D12GraphicsCommandList* pList);
@@ -61,9 +62,10 @@ namespace rdr
 		std::unique_ptr<Shadow> ptrShadowMap;
 		std::unique_ptr<GBuffer> ptrGBuffer;
 		std::unique_ptr<FrameConstBuffer> ptrFrameCBuffer;
-		std::vector<std::unique_ptr<Mesh>> meshVec;
+		std::vector<std::shared_ptr<Mesh>> meshVec;
 		uint32_t MainDSVIndex;
 		const PipelineStateObject* ptrSkyBoxPso;
+		std::shared_ptr<Material> ptrSSRMaterial;
 
 		//TODO:待修改
 	private:

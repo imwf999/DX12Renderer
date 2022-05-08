@@ -256,7 +256,7 @@
     <None Include="..\Shader\CommonFunction.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="..\Shader\DrawNormal.hlsl">
+    <None Include="..\Shader\DrawGBuffer.hlsl">
       <FileType>Document</FileType>
     </None>
     <None Include="..\Shader\SSAO.hlsl">
@@ -274,6 +274,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shader\CommonData.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shader\SSR.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

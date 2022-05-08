@@ -7,6 +7,7 @@ namespace rdr
 	class DepthTexture;
 	class Renderer;
 	class Material;
+	class Mesh;
 
 	class GBuffer
 	{
@@ -19,8 +20,11 @@ namespace rdr
 
 	private:
 		std::shared_ptr<RenderTexture> ptrScreenSpaceNormal;
+		std::shared_ptr<RenderTexture> ptrScreenSpaceDiffuse;
+		std::shared_ptr<RenderTexture> ptrWorldNormal;
+		std::shared_ptr<RenderTexture> ptrDirectLight;
 		std::shared_ptr<DepthTexture> ptrDepthTexture;
-		std::shared_ptr<Material> ptrMaterial;
+		std::shared_ptr<Mesh> ptrMesh;
 		const Renderer* ptrRenderer;
 	};
 }

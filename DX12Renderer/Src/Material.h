@@ -64,7 +64,7 @@ namespace rdr
 		~Material() = default;
 
 	public:
-		void CreateConstBuffer(const Renderer& renderer, const std::vector<std::pair<std::string, std::any>>& InBufferData);
+		void BindCBuffer(const Renderer& renderer, const std::vector<std::pair<std::string, std::any>>& InBufferData);
 		void BindTexture(const std::string& InName, const Renderer& renderer);
 		void BindSampler(uint32_t samplerIndexInDescHeap) { samplerVec.push_back(samplerIndexInDescHeap); }
 		const std::string& GetName() const { return name; }
@@ -74,6 +74,7 @@ namespace rdr
 		const std::vector<uint32_t>& GetSampler() const { return samplerVec; }
 		const std::shared_ptr<Shader>& GetShader() const { return ptrShader; }
 		const std::vector<CBufferElement>& GetCBufferElementVec() const { return CBufferElementVec; }
+		void UpdateConstData(const std::string& InName, const void* pData, uint32_t size);
 
 	private:
 		std::string name;

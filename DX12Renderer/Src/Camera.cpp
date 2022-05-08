@@ -65,11 +65,6 @@ namespace rdr
 		XMStoreFloat3(&upDir, XMVector3TransformNormal(XMLoadFloat3(&upDir), rotate));
 		XMStoreFloat3(&forwardDir, XMVector3TransformNormal(XMLoadFloat3(&forwardDir), rotate));
 
-		//XMMATRIX rotate = XMMatrixRotationX(angle);
-		//XMStoreFloat3(&rightDir, XMVector3TransformNormal(XMLoadFloat3(&rightDir), rotate));
-		//XMStoreFloat3(&upDir, XMVector3TransformNormal(XMLoadFloat3(&upDir), rotate));
-		//XMStoreFloat3(&forwardDir, XMVector3TransformNormal(XMLoadFloat3(&forwardDir), rotate));
-
 		needUpdate = true;
 	}
 

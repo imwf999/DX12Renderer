@@ -7,7 +7,7 @@
 
 namespace rdr
 {
-	//TODO:这里链式调用可以封装成一个函数或者宏
+	//TODO:这里链式调用可以封装成函数或者宏
 	ShaderPool::ShaderPool(ID3D12Device4* device)
 	{
 		AddShader("Phong")
@@ -46,14 +46,38 @@ namespace rdr
 			.CreateRootSignature(device)
 			.CreatePSO(SkyBoxPSO().desc, device);
 
-		AddShader("DrawNormal")
+		AddShader("GBuffer")
 			.CompileVertexShader(GBUFFER_SHADER_FILE_PATH, "VSMain")
 			.CompilePixelShader(GBUFFER_SHADER_FILE_PATH, "PSMain")
-			.AddInputElement({ { "POSITION", 3 }, {"TEXCOORD", 2}, {"NORMAL", 3} })		//顶点缓冲目前都是共用一个，所以这里必须把纹理坐标也带上,虽然并没有用到
+			.AddInputElement({ { "POSITION", 3}, {"TEXCOORD", 2}, {"NORMAL", 3}, {"TANGENT", 3 } })		//顶点缓冲目前都是共用一个，所以这里必须把纹理坐标也带上,虽然并没有用到
+			.AddSlot({ Shader::FrameCBuffer, 0, 0, 0 })
+			.AddSlot({ Shader::ObjectCBuffer, 1, 0, 0 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 0, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 1, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 2, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSampler, 0, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSampler, 1, 0, 1 })
+			.CreateRootSignature(device)
+			.CreatePSO(GBufferPSO().desc, device);
+
+		AddShader("SSR")
+			.CompileVertexShader(SSR_SHADER_FILE_PATH, "VSMain")
+			.CompilePixelShader(SSR_SHADER_FILE_PATH, "PSMain")
+			.AddInputElement({ { "POSITION", 3}, {"TEXCOORD", 2}, {"NORMAL", 3}})
+			.AddSlot({ Shader::DescriptorHeapSRV, 0, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 1, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 2, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 3, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 4, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSRV, 5, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSampler, 0, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSampler, 1, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSampler, 2, 0, 1 })
+			.AddSlot({ Shader::DescriptorHeapSampler, 3, 0, 1 })
 			.AddSlot({ Shader::FrameCBuffer, 0, 0, 0 })
 			.AddSlot({ Shader::ObjectCBuffer, 1, 0, 0 })
 			.CreateRootSignature(device)
-			.CreatePSO(DrawNormalPSO().desc, device);
+			.CreatePSO(PhongPSO().desc, device);
 
 #if SSAO
 		AddShader("Ssao")

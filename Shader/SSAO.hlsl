@@ -78,19 +78,19 @@ VertexOutput VSMain(uint id : SV_VertexID)
 
     output.posInTexture = SSAOVertexArr[id];
 
-    float4 vertex = float4(SSAOVertexArr[id].x, SSAOVertexArr[id].y, 0.0f, 1.0f);
+    float4 vertex = float4(SSAOVertexArr[id].x, SSAOVertexArr[id].y, 0.0f, 1.0f);   //w为1，所以NDC空间坐标就是投影空间坐标
 
     output.posInProjection = InverseTextureTransform(vertex);
 
-    //TODO:这里留下一个疑问，NDC空间不应该进行反透视除法也就是先乘以w，然后再执行逆投影变换吗？
-    float4 tempPos = mul(output.posInProjection, globalInverseProj);
+    float4 tempPos = mul(output.posInProjection, globalInverseProj);        //逆投影变换后得到观察空间的点,此时xy范围在[-1,1],z = 1
 
-    output.posInView = tempPos.xyz / tempPos.w;
+    //这里为什么要除以w：
+    //  https://www.cnblogs.com/winsons/p/13110953.html
+    output.posInView = tempPos.xyz / tempPos.w;                                //除以w后z值等于摄像机离近平面距离
 
     return output;
 }
 
-//TODO:这里返回4维向量，改成返回一维向量试试
 float4 PSMain(VertexOutput pin) : SV_Target
 {
     float3 normalInViewSpace = normalize(globalSSAONormalMap.Sample(globalsamPointClamp, pin.posInTexture).xyz);
@@ -107,7 +107,6 @@ float4 PSMain(VertexOutput pin) : SV_Target
     for (int i = 0; i < SSAOSampleCount; ++i)
     {
         float3 offset = reflect(globalSampleVec[i].xyz, randVec);
-        //float3 offset = normalize(globalSampleVec[i].xyz) * globalSampleVec[i].w;
         
         float flipValue = sign(dot(normalInViewSpace, offset));
         
@@ -130,7 +129,7 @@ float4 PSMain(VertexOutput pin) : SV_Target
         ssaoValue += tempSsaoValue;
     }
     
-    //TODO:有些像素全黑，可以在这里加个if判断，把全黑的给一点亮度
+    //TODO:有些像素全黑，试试加个if判断，把全黑的给一点亮度
     ssaoValue /= SSAOSampleCount;
     
     float access = 1.0f - ssaoValue;

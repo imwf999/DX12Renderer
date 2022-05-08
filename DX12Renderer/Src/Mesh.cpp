@@ -25,7 +25,7 @@ namespace rdr
 	           uint32_t InStartIndexLocation, uint32_t InBaseVertexLocation): pModel(nullptr)
 	{
 		Submesh mesh;
-		mesh.material = renderer.GetMaterialPool()->GetMaterial(InMatName);
+		mesh.materialVec.push_back(renderer.GetMaterialPool()->GetMaterial(InMatName));
 		mesh.vertexCount = InVertexNum;
 		mesh.startIndexLocation = InStartIndexLocation;
 		mesh.baseVertexLocation = InBaseVertexLocation;
@@ -54,16 +54,16 @@ namespace rdr
 		}
 	}
 
-	void Mesh::DrawByIndex(ID3D12GraphicsCommandList* pList, const DescriptorPool* pDescriptorPool, const FrameConstBuffer& frameBuffer)
+	void Mesh::DrawByIndex(ID3D12GraphicsCommandList* pList, const DescriptorPool* pDescriptorPool, const FrameConstBuffer& frameBuffer, uint32_t matIndex)
 	{
 		size_t length = submeshVec.size();
 		pList->IASetVertexBuffers(0, 1, &pVertexBuffer->BufferView());
 		pList->IASetIndexBuffer(&pIndexBuffer->BufferView());
 		pList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		auto& shader = submeshVec[0].material->GetShader();
+		auto& shader = submeshVec[0].materialVec[matIndex]->GetShader();
 		for (size_t i = 0; i < length; ++i)
 		{
-			shader->SetRootSignature(pList, pDescriptorPool, *submeshVec[i].material, frameBuffer);
+			shader->SetRootSignature(pList, pDescriptorPool, *submeshVec[i].materialVec[matIndex], frameBuffer);
 			pList->DrawIndexedInstanced(submeshVec[i].indexCount, 1, submeshVec[i].startIndexLocation, submeshVec[i].baseVertexLocation, 0);
 		}
 	}
@@ -104,7 +104,7 @@ namespace rdr
 				indexVec[indices] = ptrMesh->mFaces[faceIndex].mIndices[index];
 		}
 		Submesh submesh = {  };
-		submesh.material = renderer.GetMaterialPool()->GetMaterial("SkyBox");
+		submesh.materialVec.push_back(renderer.GetMaterialPool()->GetMaterial("SkyBox"));
 		submesh.indexCount = ptrMesh->mNumFaces * ptrMesh->mFaces->mNumIndices;
 		submesh.startIndexLocation = submesh.baseVertexLocation = 0;
 		submeshVec.push_back(submesh);
@@ -153,13 +153,9 @@ namespace rdr
 	void Mesh::AddSponzaSubmesh(const aiMesh& mesh, const Renderer& renderer, uint32_t indexOffset, uint32_t vertexOffset)
 	{
 		Submesh submesh = {};
-		submesh.material = renderer.GetMaterialPool()->AddMaterialFromSponzaMesh(std::string(mesh.mName.C_Str()));
+		submesh.submeshName = std::string(mesh.mName.C_Str());
+		submesh.materialVec = renderer.GetMaterialPool()->AddMaterialFromSponzaMesh(submesh.submeshName);
 		submesh.indexCount = mesh.mNumFaces * mesh.mFaces->mNumIndices;
-		if(submesh.indexCount == 1200)
-		{
-			int i = 0;
-			++i;
-		}
 		submesh.startIndexLocation = indexOffset;
 		submesh.baseVertexLocation = vertexOffset;
 		submeshVec.push_back(submesh);

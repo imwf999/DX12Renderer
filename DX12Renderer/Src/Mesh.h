@@ -33,7 +33,8 @@ namespace rdr
 	private:
 		struct Submesh
 		{
-			std::shared_ptr<Material> material;
+			std::vector<std::shared_ptr<Material>> materialVec;
+			std::string submeshName;
 			union
 			{
 				uint32_t indexCount;
@@ -45,7 +46,7 @@ namespace rdr
 
 	public:
 		void DrawByIndex(ID3D12GraphicsCommandList* pList, const DescriptorPool* pDescriptorPool, const FrameConstBuffer& frameBuffer, const Material& material);
-		void DrawByIndex(ID3D12GraphicsCommandList* pList, const DescriptorPool* pDescriptorPool, const FrameConstBuffer& frameBuffer);
+		void DrawByIndex(ID3D12GraphicsCommandList* pList, const DescriptorPool* pDescriptorPool, const FrameConstBuffer& frameBuffer, uint32_t matIndex);
 		void LoadSponza(const std::string& filePath, const Renderer& renderer);
 		void LoadSkyBox(const std::string& filePath, const Renderer& renderer);
 		const std::vector<Submesh>& GetSubmeshData() const { return submeshVec; }

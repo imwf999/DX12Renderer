@@ -24,7 +24,7 @@ namespace rdr
 
 		pRtvHeap = std::make_unique<DescriptorHeap>(
 			device.Get(),
-			global_SwapChainBufferNum,
+			global_RenderTargetNum,
 			D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 			desc.isRtvShaderVisible);
 

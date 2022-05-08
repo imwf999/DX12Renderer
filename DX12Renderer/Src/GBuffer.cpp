@@ -16,8 +16,11 @@ namespace rdr
 {
 	GBuffer::GBuffer(const Renderer& renderer)
 		: ptrScreenSpaceNormal(std::dynamic_pointer_cast<RenderTexture>(renderer.GetTexPool()->GetTexture("ScreenNormal"))),
+	ptrScreenSpaceDiffuse(std::dynamic_pointer_cast<RenderTexture>(renderer.GetTexPool()->GetTexture("GBufferDiffuse"))),
+	ptrWorldNormal(std::dynamic_pointer_cast<RenderTexture>(renderer.GetTexPool()->GetTexture("ScreenWorldNormal"))),
+	ptrDirectLight(std::dynamic_pointer_cast<RenderTexture>(renderer.GetTexPool()->GetTexture("GBufferDirectLight"))),
 	ptrDepthTexture(std::dynamic_pointer_cast<DepthTexture>(renderer.GetTexPool()->GetTexture("SsaoDepthTex"))),
-	ptrMaterial(renderer.GetMaterialPool()->GetMaterial("DrawNormal")),
+	ptrMesh(renderer.GetMeshVec()[0]),
 	ptrRenderer(&renderer)
 	{
 
@@ -36,20 +39,26 @@ namespace rdr
 		const auto& mesh = ptrRenderer->GetMeshVec();
 		pList->RSSetViewports(1, &pDisplay->GetViewPort());
 		pList->RSSetScissorRects(1, &pDisplay->GetRect());
-		auto& RTV = pDescriptorPool->GetRtvStart().Offset(ptrScreenSpaceNormal->GetRtvIndex(), pDescriptorPool->GetRtvDescSize());
+		auto& NormalRTV = pDescriptorPool->GetRtvStart().Offset(ptrScreenSpaceNormal->GetRtvIndex(), pDescriptorPool->GetRtvDescSize());
+		auto& DiffuseRTV = pDescriptorPool->GetRtvStart().Offset(ptrScreenSpaceDiffuse->GetRtvIndex(), pDescriptorPool->GetRtvDescSize());
+		auto& WorldRTV = pDescriptorPool->GetRtvStart().Offset(ptrWorldNormal->GetRtvIndex(), pDescriptorPool->GetRtvDescSize());
+		auto& DirectLightRTV = pDescriptorPool->GetRtvStart().Offset(ptrDirectLight->GetRtvIndex(), pDescriptorPool->GetRtvDescSize());
+		D3D12_CPU_DESCRIPTOR_HANDLE RTVArr[4] = { NormalRTV.CpuHandle(), DiffuseRTV.CpuHandle(), WorldRTV.CpuHandle(), DirectLightRTV.CpuHandle() };
 		auto& DSV = pDescriptorPool->GetDsvStart().Offset(ptrDepthTexture->GetDsvIndex(), pDescriptorPool->GetDsvDescSize());
-		pList->OMSetRenderTargets(1, &RTV.CpuHandle(), false, &DSV.CpuHandle());
-		pList->ClearRenderTargetView(RTV.CpuHandle(), DirectX::Colors::LightSteelBlue, 0, nullptr);
+		pList->OMSetRenderTargets(4, RTVArr, true, &DSV.CpuHandle());
 		pList->ClearDepthStencilView(DSV.CpuHandle(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
-		const auto& shader = ptrMaterial->GetShader();
+		const auto& shader = ptrMesh->GetSubmeshData()[0].materialVec[0]->GetShader();
 		pList->SetGraphicsRootSignature(shader->GetRootSignature().GetSignature());
 		pList->SetPipelineState(shader->GetPSO().GetPSO());
-		uint32_t length = mesh.size() - 1;
-		for (uint32_t index = 0; index < length; ++index)
+		size_t length = mesh.size() - 1;
+		for (size_t index = 0; index < length; ++index)
 		{
-			mesh[index]->DrawByIndex(pList, pDescriptorPool, *ptrRenderer->GetFrameCBuffer(), *ptrMaterial);
+			mesh[index]->DrawByIndex(pList, pDescriptorPool, *ptrRenderer->GetFrameCBuffer(), 0);
 		}
+		//TODO:多个资源屏障可以优化
 		ptrDepthTexture->SetStateFromDepthWriteToGenericRead(pList);
 		ptrScreenSpaceNormal->SetStateFromRenderTargetToShaderResource(pList);
+		ptrScreenSpaceDiffuse->SetStateFromRenderTargetToShaderResource(pList);
+		ptrDirectLight->SetStateFromRenderTargetToShaderResource(pList);
 	}
 }

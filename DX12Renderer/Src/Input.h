@@ -9,6 +9,7 @@ namespace rdr
 {
 	class Camera;
 	class GameTimer;
+	class Renderer;
 
 	class Input
 	{
@@ -42,7 +43,7 @@ namespace rdr
 				lastPostionY = y;
 			}
 		}
-		void Update(const GameTimer& gameTimer, Camera& camera);
+		void Update(const GameTimer& gameTimer, Camera& camera, const Renderer& renderer);
 
 	private:
 		int lastPostionX;

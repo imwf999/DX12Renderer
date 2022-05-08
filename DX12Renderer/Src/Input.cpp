@@ -2,6 +2,8 @@
 #include "Camera.h"
 #include "GameTimer.h"
 #include "ConstValue.h"
+#include "Renderer.h"
+#include "MaterialPool.h"
 
 namespace rdr
 {
@@ -11,7 +13,7 @@ namespace rdr
 
 	}
 
-	void Input::Update(const GameTimer& gameTimer, Camera& camera)
+	void Input::Update(const GameTimer& gameTimer, Camera& camera, const Renderer& renderer)
 	{
 		if (isRightButtonDown == true)
 		{
@@ -33,5 +35,9 @@ namespace rdr
 			if (GetAsyncKeyState('E') & 0x8000)
 				camera.MoveUp(camera.GetMoveSpeed() * deltaTime);
 		}
+		if (GetAsyncKeyState('I') & 0x8000)
+			renderer.GetMaterialPool()->SetOpenIndirectLight(false);
+		if (GetAsyncKeyState('O') & 0x8000)
+			renderer.GetMaterialPool()->SetOpenIndirectLight(true);
 	}
 }

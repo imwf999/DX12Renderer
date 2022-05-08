@@ -29,3 +29,52 @@ float NdcDepthToViewDepth(float z_ndc)
     float viewZ = globalProj[3][2] / (z_ndc - globalProj[2][2]);
     return viewZ;
 }
+
+float3 ComputeDirectLight(float3 lightColor, float3 lightDir, float3 normal)
+{
+    return lightColor * max(0, dot(lightDir, normal));
+}
+
+float3 ComputeDiffuse(float3 lightColor, float3 lightDir, float3 normal, float4 diffuseAbedo)
+{
+    return ComputeDirectLight(lightColor, lightDir, normal) * diffuseAbedo.rgb;
+}
+
+float3 ComputeSpecular(float3 lightColor, float3 lightDir, float3 posW, float3 normal, float m, float3 fresnelR0)
+{
+    float3 viewDir = normalize(posW - globalEyePostion.xyz);
+
+    float3 fresnelRF = fresnelR0 + (1 - fresnelR0) * pow(1 - saturate(dot(lightDir, normal)), 5);
+
+    float3 halfDir = normalize(lightDir + viewDir); //直射入眼睛的那部分光线和人眼之间的微平面法线
+    float roughnessFactor = (m + 8) * pow(max(dot(normal, halfDir), 0), m) / 8;
+
+    float3 specAbedo = fresnelRF * roughnessFactor;
+    specAbedo = specAbedo / (specAbedo + 1.0f); //有些高光因子会大于1，如果没有这个处理的话有些像素会呈现纯白色
+    return ComputeDirectLight(lightColor, lightDir, normal) * specAbedo;
+}
+
+//点光源暂时没用
+//float3 ComputePointLight(Light pointLight, float3 posW, float3 normal, float m, float4 diffuseAbedo, float3 fresnelR0)
+//{
+//    float3 lightDir = pointLight.position - posW;
+//    float lightDistance = length(lightDir);
+//    if (lightDistance > pointLight.fallOffEnd)
+//        return 0.0f;
+//    float fallFactor = saturate((pointLight.fallOffEnd - lightDistance) / (pointLight.fallOffEnd - pointLight.fallOffStart));
+
+//    lightDir /= lightDistance;
+//    float3 diffuse = ComputeDiffuse(pointLight.lightColor, lightDir, normal, diffuseAbedo);
+//    float3 specular = ComputeSpecular(pointLight.lightColor, lightDir, posW, normal, m, fresnelR0);
+
+//    return (diffuse + specular) * fallFactor;
+//}
+
+//函数内部把方向取反，所以外部传入的方向是从光源指向目标点
+float3 ComputeDirectionalLight(float3 lightDir, float3 lightColor, float3 posW, float3 normal, float m, float4 diffuseAbedo, float3 fresnelR0)
+{
+    lightDir = -lightDir;
+    float3 diffuse = ComputeDiffuse(lightColor, lightDir, normal, diffuseAbedo);
+    float3 specular = ComputeSpecular(lightColor, lightDir, posW, normal, m, fresnelR0);
+    return diffuse + specular;
+}

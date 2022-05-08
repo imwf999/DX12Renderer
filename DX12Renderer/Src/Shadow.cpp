@@ -26,8 +26,12 @@ namespace rdr
 	ptrRenderer(&renderer)
 	{
 		ptrShadowCamera = Game::Instance()->GetCamera();
-		ViewMatrix = XMMatrixLookAtLH(-5000 * XMLoadFloat4(&LightPool::SunDirection), { 0, 0, 0, 1 }, { 0, 1, 0, 0 });
-		ProjMatrix = XMMatrixOrthographicLH(global_lightProjectionWidth, global_lightProjectionHeight, ptrShadowCamera->GetNearZ(), ptrShadowCamera->GetFarZ());
+		//ViewMatrix = XMMatrixLookAtLH(-4000 * XMLoadFloat4(&LightPool::SunDirection), { 0, 0, 0, 1 }, { 0, 1, 0, 0 });
+		//ProjMatrix = XMMatrixOrthographicLH(global_lightProjectionWidth, global_lightProjectionHeight, ptrShadowCamera->GetNearZ(), ptrShadowCamera->GetFarZ());
+		ViewMatrix = XMMatrixLookAtLH(XMLoadFloat4(&LightPool::AreaLightPosition), { 0.0f, 0.0f, -40.0f, 1.0f }, { 0.0f, 0.0f, 1.0f, 0.0f });
+		//ProjMatrix = XMMatrixPerspectiveFovLH(0.4f * Math::Pi, global_ShadowMapWidth / static_cast<float>(global_ShadowMapHeight), 40.0f, 1300.0f);
+		ProjMatrix = XMMatrixPerspectiveFovLH(0.55f * Math::Pi, 2.5f, 40.0f, 1300.0f);
+		
 	}
 
 	Shadow::~Shadow() = default;

@@ -55,7 +55,7 @@ namespace rdr
 		{
 			desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 			desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-			desc.BlendState.AlphaToCoverageEnable = true;
+			//desc.BlendState.AlphaToCoverageEnable = true;
 			desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 			desc.SampleMask = UINT_MAX;
 			desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -88,17 +88,20 @@ namespace rdr
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC desc = {  };
 	};
 
-	struct DrawNormalPSO
+	struct GBufferPSO
 	{
-		DrawNormalPSO()
+		GBufferPSO()
 		{
 			desc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 			desc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 			desc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 			desc.SampleMask = UINT_MAX;
 			desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-			desc.NumRenderTargets = 1;
+			desc.NumRenderTargets = 4;
 			desc.RTVFormats[0] = DXGI_FORMAT_R16G16B16A16_FLOAT;
+			desc.RTVFormats[1] = DXGI_FORMAT_R16G16B16A16_FLOAT;
+			desc.RTVFormats[2] = DXGI_FORMAT_R16G16B16A16_FLOAT;
+			desc.RTVFormats[3] = DXGI_FORMAT_R16G16B16A16_FLOAT;
 			desc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 			desc.SampleDesc.Count = 1;
 			desc.SampleDesc.Quality = 0;

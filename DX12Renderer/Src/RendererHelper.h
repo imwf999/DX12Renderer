@@ -97,13 +97,30 @@ namespace rdr
 
 	static DirectX::XMMATRIX InverseTranspose(DirectX::CXMMATRIX M)
 	{
-		// Inverse-transpose is just applied to normals.  So zero out 
-		// translation row so that it doesn't get into our inverse-transpose
-		// calculation--we don't want the inverse-transpose of the translation.
 		DirectX::XMMATRIX A = M;
 		A.r[3] = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
 
 		DirectX::XMVECTOR det = DirectX::XMMatrixDeterminant(A);
 		return DirectX::XMMatrixTranspose(DirectX::XMMatrixInverse(&det, A));
+	}
+
+	//通过模型名获取到文件夹中对应的纹理和法线名
+	static std::tuple<std::string, std::string> GetTextureFromMesh(const std::string& meshName)
+	{
+		std::string tempName = meshName;
+		for (size_t length = tempName.size(), i = 0, count = 0; i < length; ++i)
+		{
+			if (tempName[i] == '_') ++count;
+			if (count == 4)
+			{
+				tempName = tempName.substr(i + 1);
+				break;
+			}
+		}
+		std::string diffuseName = tempName + "_diffuse", normalName;
+		if (tempName.substr(0, 6) == "fabric") normalName = "fabric_normal";
+		else normalName = tempName + "_normal";
+		std::tuple<std::string, std::string> result = std::make_tuple(diffuseName, normalName);
+		return result;
 	}
 }

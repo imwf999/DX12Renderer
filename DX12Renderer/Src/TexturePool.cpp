@@ -55,12 +55,24 @@ namespace rdr
 		shadowMap->Create2D(renderer, DepthTexture::ShadowFormat, global_ShadowMapWidth, global_ShadowMapHeight);
 		AddTexture(shadowMap);
 
-		//用于存储G-Buffer中的像素法线
+		//用于存储G-Buffer中的像素法线， 摄像机空间下
 		RenderTexPtr normalTex = std::make_shared<RenderTexture>("ScreenNormal", renderer, RenderTexture::ScreenNormalMapFormat);
 		AddTexture(normalTex);
 
+		//存储G-Buffer的像素漫反射反射率
+		RenderTexPtr diffuseTex = std::make_shared<RenderTexture>("GBufferDiffuse", renderer, RenderTexture::ScreenNormalMapFormat);
+		AddTexture(diffuseTex);
+
+		//存储G-Buffer中像素法线，世界空间下
+		RenderTexPtr worldNormalTex = std::make_shared<RenderTexture>("ScreenWorldNormal", renderer, RenderTexture::ScreenNormalMapFormat);
+		AddTexture(worldNormalTex);
+
+		//存储G-Buffer的直接光照
+		RenderTexPtr directLightTex = std::make_shared<RenderTexture>("GBufferDirectLight", renderer, RenderTexture::ScreenNormalMapFormat);
+		AddTexture(directLightTex);
+
 		//用于存储G-Buffer中的像素深度
-		DepthTexPtr ssaoDepthTex = std::make_shared<DepthTexture>("SsaoDepthTex");
+		DepthTexPtr ssaoDepthTex = std::make_shared<DepthTexture>("SsaoDepthTex");		//TODO:需要改名
 		ssaoDepthTex->Create2D(renderer, DepthTexture::ShadowFormat, global_WindowWidth, global_WindowHeight);
 		AddTexture(ssaoDepthTex);
 

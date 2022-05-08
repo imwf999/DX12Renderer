@@ -30,7 +30,7 @@
     <None Include="..\Shader\CommonFunction.hlsl">
       <Filter>Shader</Filter>
     </None>
-    <None Include="..\Shader\DrawNormal.hlsl">
+    <None Include="..\Shader\DrawGBuffer.hlsl">
       <Filter>Shader</Filter>
     </None>
     <None Include="..\Shader\SSAO.hlsl">
@@ -40,6 +40,9 @@
       <Filter>Shader</Filter>
     </None>
     <None Include="..\Shader\CommonData.hlsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="..\Shader\SSR.hlsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>
