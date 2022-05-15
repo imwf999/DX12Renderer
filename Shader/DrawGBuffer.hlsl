@@ -152,6 +152,7 @@ PixelOutput PSMain(VertexOutput input)
     
     //计算直接光照
     float4 diffuseAlbedo = globalDiffuseTexture.Sample(globalSampler, input.uv);
+    clip(diffuseAlbedo.a - 0.01f);
     float m = globalShininess * 256 * tempNormal.a;
     float3 lightDir = normalize(globalDirectionalLight.position - input.posW.xyz);
     float3 directLight = ComputeDirectionalLight(lightDir, input.posW.xyz, worldNormal, m, diffuseAlbedo);

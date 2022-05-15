@@ -39,7 +39,7 @@ namespace rdr
 			case 2: format = DXGI_FORMAT_R32G32_FLOAT; break;
 			case 3: format = DXGI_FORMAT_R32G32B32_FLOAT; break;
 			case 4: format = DXGI_FORMAT_R32G32B32A32_FLOAT; break;
-			default: throw"Wrong Demension";
+			default: DX_THROW("Wrong Demension");
 			}
 			const D3D12_INPUT_ELEMENT_DESC desc =
 			{

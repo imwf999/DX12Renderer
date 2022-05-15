@@ -20,18 +20,24 @@ namespace rdr
 		~Input() = default;
 
 	public:
-		inline void OnRightMouseDown(int x, int y)
+		int GetLastPosX() { return  lastPostionX; }
+		int GetLastPosY() { return lastPostionY; }
+
+		void OnLeftMouseDown(int x, int y);
+
+		void OnRightMouseDown(int x, int y)
 		{
 			lastPostionX = x;
 			lastPostionY = y;
 			isRightButtonDown = true;
 		}
 
-		inline void OnRightMouseUp()
+		void OnRightMouseUp()
 		{
 			isRightButtonDown = false;
 		}
-		inline void OnMouseMove(int x, int y)
+
+		void OnMouseMove(int x, int y)
 		{
 			//当按下右键时鼠标的移动才生效
 			if (isRightButtonDown == true)

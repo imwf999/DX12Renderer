@@ -5,7 +5,7 @@ namespace rdr
 {
 	GameTimer::GameTimer()
 		: mStopTime(0), mSecondsPerCount(0.0), mDeltaTime(-1.0), mBaseTime(0),
-		mPausedTime(0), mPrevTime(0), mCurrTime(0), mStopped(false)
+		mPausedTime(0), mPrevTime(0), mCurrTime(0), mStopped(false), FPSText(L"帧率: 0   每帧用时: 0")
 	{
 		__int64 countsPerSec;
 		QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSec);
@@ -89,31 +89,29 @@ namespace rdr
 		}
 	}
 
-	void GameTimer::ShowFrameTime(HWND hwnd, const std::wstring winName)
+	std::wstring GameTimer::GetFrameTimeText()
 	{
 		static int frameCnt = 0;
 		static float timeElapsed = 0.0f;
 
 		frameCnt++;
 
-		if ((TotalTime() - timeElapsed) >= 1.0f)
+		if (TotalTime() - timeElapsed >= 1.0f)
 		{
-			float fps = (float)frameCnt; // fps = frameCnt / 1
+			int fps = frameCnt; // fps = frameCnt / 1
 			float mspf = 1000.0f / fps;
 
 			std::wstring fpsStr = std::to_wstring(fps);
 			std::wstring mspfStr = std::to_wstring(mspf);
 
-			std::wstring windowText = winName +
-				L"    帧率: " + fpsStr +
-				L"   每帧用时: " + mspfStr +
-				L"毫秒";
-
-			SetWindowText(hwnd, windowText.c_str());
+			 FPSText = L"帧率: " + fpsStr +
+				L"   每帧用时: " + mspfStr +L"毫秒";
 
 			// Reset for next average.
 			frameCnt = 0;
 			timeElapsed += 1.0f;
 		}
+
+		return FPSText;
 	}
 }

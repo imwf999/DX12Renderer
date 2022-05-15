@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include "RendererHelper.h"
+
 namespace rdr
 {
 	class Shader;
@@ -19,7 +21,7 @@ namespace rdr
 		{
 			auto index = ShaderMap.find(name);
 			if (index == ShaderMap.end())
-				throw "no such shader";
+				DX_THROW("no such shader");
 			return ShaderMap.at(name);
 		}
 

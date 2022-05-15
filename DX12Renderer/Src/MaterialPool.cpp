@@ -88,7 +88,7 @@ namespace rdr
 	{
 		const auto& tIndex = MaterialData.find(InName);
 		if (tIndex != MaterialData.cend())
-			throw "Two Materials Have The Same Name";
+			DX_THROW("Two Materials Have The Same Name");
 		const std::shared_ptr<Shader>& tPtrShader = renderer.GetShaderPool()->GetShader(InShaderName);
 		std::shared_ptr<Material> ptrMat = std::make_shared<Material>(InName, tPtrShader);
 		MaterialData.insert({ InName, ptrMat });
@@ -147,7 +147,7 @@ namespace rdr
 	const std::shared_ptr<Material>& MaterialPool::GetMaterial(const std::string& InName)
 	{
 		const std::shared_ptr<Material>& tPtrMat = MaterialData[InName];
-		if (tPtrMat == nullptr) throw "No Such Material";
+		if (tPtrMat == nullptr) DX_THROW("No Such Material");
 		return tPtrMat;
 	}
 

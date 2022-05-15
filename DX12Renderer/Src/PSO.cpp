@@ -1,5 +1,5 @@
 #include "PSO.h"
-#include "d3dUtil.h"
+#include "RendererHelper.h"
 
 namespace rdr
 {
@@ -47,7 +47,7 @@ namespace rdr
 
 	void PipelineStateObject::SetRTVFormat(uint32_t index, DXGI_FORMAT format)
 	{
-		if (index >= 8) throw "Index Is Out Of Range";
+		if (index >= 8) DX_THROW("Index Is Out Of Range");
 		pipelineStateDesc.RTVFormats[index] = format;
 	}
 
@@ -58,6 +58,6 @@ namespace rdr
 
 	void PipelineStateObject::Create(ID3D12Device4* device)
 	{
-		ThrowIfFailed(device->CreateGraphicsPipelineState(&pipelineStateDesc, IID_PPV_ARGS(this->pPipelineState.GetAddressOf())));
+		CHECK_RESULT(device->CreateGraphicsPipelineState(&pipelineStateDesc, IID_PPV_ARGS(this->pPipelineState.GetAddressOf())));
 	}
 }

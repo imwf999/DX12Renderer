@@ -53,9 +53,6 @@
     <ClCompile Include="Src\Commond.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\d3dUtil.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Src\DDSTextureLoader12.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -146,6 +143,27 @@
     <ClCompile Include="Src\ConstantBuffer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Src\UIRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Text.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Audio.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\UIManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MeshHandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Toggle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\BaseUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera.h">
@@ -158,9 +176,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\ConstValue.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\d3dUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\d3dx12.h">
@@ -257,6 +272,30 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\FrameConstBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\UIRenderer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Text.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Audio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\UIManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\BaseUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MeshHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\UIClick.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Toggle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

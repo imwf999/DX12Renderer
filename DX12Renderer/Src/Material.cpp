@@ -26,7 +26,7 @@ namespace rdr
 			if (tType == typeid(XMINT3)) { tValuePtrVec[index] = new XMINT3(std::any_cast<XMINT3>(InValue)); return Element::Int3; }
 			if (tType == typeid(XMINT4)) { tValuePtrVec[index] = new XMINT4(std::any_cast<XMINT4>(InValue)); return Element::Int4; }
 			if (tType == typeid(bool)) { tValuePtrVec[index] = new bool(std::any_cast<bool>(InValue)); return Element::Bool; }
-			throw "Type Not Supported";
+			DX_THROW("Type Not Supported")
 		};
 
 		uint32_t tPreElementOffset = 0;
@@ -45,7 +45,7 @@ namespace rdr
 		ptrConstBuffer->CreateConstBuffer(renderer, tPreElementOffset);
 		for(int32_t index = 0; index < tLength; ++index)
 		{
-			if (tValuePtrVec[index] == nullptr) throw "Data Is Null";
+			if (tValuePtrVec[index] == nullptr) DX_THROW("Data Is Null")
 			const Element& tElement = CBufferElementMap[InBufferData[index].first];
 			ptrConstBuffer->Update(tElement.offset, tValuePtrVec[index], tElement.size);
 		}

@@ -5,6 +5,8 @@
 #include "Input.h"
 #include "Camera.h"
 #include <windowsx.h>
+#include "Audio.h"
+#include "UIManager.h"
 
 namespace rdr
 {
@@ -68,7 +70,10 @@ namespace rdr
 		InitMainWindow();
 		pGameTimer = std::make_unique<GameTimer>();
 		pCamera = std::make_shared<Camera>();
+		ptrAudio = std::make_unique<Audio>();
 		pRenderer = std::make_unique<Renderer>();
+		ptrUIManager = std::make_unique<UIManager>();
+		ptrUIManager->Initialize(*pRenderer->GetUIRenderer());
 		pInput = std::make_unique<Input>([&](float dx, float dy) {pCamera->RotateX(dy); pCamera->RotateY(dx); });
 	}
 
@@ -84,6 +89,9 @@ namespace rdr
 			break;
 		case WM_RBUTTONDOWN:
 			pInput->OnRightMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+			break;
+		case WM_LBUTTONDOWN:
+			pInput->OnLeftMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 		case WM_RBUTTONUP:
 			pInput->OnRightMouseUp();
@@ -113,10 +121,10 @@ namespace rdr
 			else
 			{
 				pGameTimer->Tick();
-				pGameTimer->ShowFrameTime(mainWinHandle, winName);
-				pInput->Update(*pGameTimer.get(), *pCamera.get(), *pRenderer);
+				pInput->Update(*pGameTimer, *pCamera, *pRenderer);
 				pCamera->Update();
-				pRenderer->Update(*pCamera.get());
+				pRenderer->Update(*pCamera);
+				ptrUIManager->Update();
 				pRenderer->Draw();
 			}
 		}
