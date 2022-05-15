@@ -21,7 +21,7 @@ namespace rdr
 			SetResourceDescAsBuffer(constBufferSize);
 			renderer.GetResMgr()->CreateBufferInUploadHeap(this, constBufferSize);
 			pConstValue = nullptr;
-			ThrowIfFailed(pResource->Map(0, nullptr, &pConstValue));
+			CHECK_RESULT(pResource->Map(0, nullptr, &pConstValue));
 			memcpy(pConstValue, &value, constBufferSize);
 		}
 

@@ -19,7 +19,7 @@ namespace rdr
 	{
 		std::unique_ptr<uint8_t[]> ddsData;
 		std::vector<D3D12_SUBRESOURCE_DATA> subResourceVec;
-		ThrowIfFailed(LoadDDSTextureFromFile(renderer.GetDevice(), filePath.c_str(), ddsData, subResourceVec, this->resourceDesc));
+		CHECK_RESULT(LoadDDSTextureFromFile(renderer.GetDevice(), filePath.c_str(), ddsData, subResourceVec, this->resourceDesc));
 		renderer.GetResMgr()->CreateTextureInDefaultHeap(this, renderer.GetCommond()->GetCmdList(), subResourceVec);
 		CreateSRV(renderer, resourceDesc.Format, resourceDesc.MipLevels, is2D);
 	}

@@ -24,9 +24,12 @@ namespace rdr
 	class GBuffer;
 	class FrameConstBuffer;
 	class Material;
+	class UIRenderer;
 
 	class Renderer
 	{
+		friend UIRenderer;
+
 	public:
 		Renderer();
 		~Renderer();
@@ -43,6 +46,7 @@ namespace rdr
 		ShaderPool* GetShaderPool() const { return pShaderPool.get(); }
 		MaterialPool* GetMaterialPool() const { return pMaterialPool.get(); }
 		FrameConstBuffer* GetFrameCBuffer() const { return ptrFrameCBuffer.get(); }
+		UIRenderer* GetUIRenderer() const { return ptrUIRenderer.get(); }
 		const std::vector<std::shared_ptr<Mesh>>& GetMeshVec() const { return meshVec; }
 
 	private:
@@ -66,6 +70,9 @@ namespace rdr
 		uint32_t MainDSVIndex;
 		const PipelineStateObject* ptrSkyBoxPso;
 		std::shared_ptr<Material> ptrSSRMaterial;
+
+	private:
+		std::unique_ptr<UIRenderer> ptrUIRenderer;
 
 		//TODO:待修改
 	private:

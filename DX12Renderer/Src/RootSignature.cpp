@@ -34,7 +34,7 @@ namespace rdr
 		if (pErrorBlob != nullptr)
 			OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
 #endif
-		ThrowIfFailed(pDevice->CreateRootSignature(
+		CHECK_RESULT(pDevice->CreateRootSignature(
 			0,
 			pSignatureBlob->GetBufferPointer(),
 			pSignatureBlob->GetBufferSize(),

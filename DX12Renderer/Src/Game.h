@@ -13,6 +13,8 @@ namespace rdr
 	class GameTimer;
 	class Input;
 	class Camera;
+	class Audio;
+	class UIManager;
 
 	class Game
 	{
@@ -28,6 +30,11 @@ namespace rdr
 		HINSTANCE GetAppInstance() const { return appInstance; }
 		HWND GetMainWinHandle() const { return mainWinHandle; }
 		const std::shared_ptr<Camera>& GetCamera() const { return pCamera; }
+		const std::unique_ptr<GameTimer>& GetGameTimer() const { return pGameTimer; }
+		const std::unique_ptr<Audio>& GetAudio() const { return ptrAudio; }
+		const std::unique_ptr<Input>& GetInput() const { return pInput; }
+		const std::unique_ptr<UIManager>& GetUIManager() const { return ptrUIManager; }
+		const std::unique_ptr<Renderer>& GetRenderer() const { return  pRenderer; }
 
 	public:
 		void Initialize(HINSTANCE appIns);
@@ -47,6 +54,8 @@ namespace rdr
 		std::unique_ptr<Renderer> pRenderer;
 		std::unique_ptr<GameTimer> pGameTimer;
 		std::unique_ptr<Input> pInput;
+		std::unique_ptr<Audio> ptrAudio;
 		std::shared_ptr<Camera> pCamera;
+		std::unique_ptr<UIManager> ptrUIManager;
 	};
 }

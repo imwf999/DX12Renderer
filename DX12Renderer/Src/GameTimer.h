@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include <string>
 
 namespace rdr
@@ -17,7 +16,7 @@ namespace rdr
 		void Stop();  // Call when paused.
 		void Tick();  // Call every frame.
 
-		void ShowFrameTime(HWND hwnd, const std::wstring winName);
+		std::wstring GetFrameTimeText();
 
 	private:
 		double mSecondsPerCount;
@@ -30,5 +29,7 @@ namespace rdr
 		__int64 mCurrTime;
 
 		bool mStopped;
+
+		std::wstring FPSText;
 	};
 }

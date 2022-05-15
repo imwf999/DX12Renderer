@@ -9,14 +9,14 @@ namespace rdr
 		D3D12_COMMAND_QUEUE_DESC queueDesc = {};
 		queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 		queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
-		ThrowIfFailed(pd3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&pCommandQueue)));
+		CHECK_RESULT(pd3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&pCommandQueue)));
 
-		ThrowIfFailed(pd3dDevice->CreateCommandAllocator(
+		CHECK_RESULT(pd3dDevice->CreateCommandAllocator(
 			D3D12_COMMAND_LIST_TYPE_DIRECT,
 			IID_PPV_ARGS(pCommandAlloc.GetAddressOf())
 		));
 
-		ThrowIfFailed(pd3dDevice->CreateCommandList(
+		CHECK_RESULT(pd3dDevice->CreateCommandList(
 			0,
 			D3D12_COMMAND_LIST_TYPE_DIRECT,
 			pCommandAlloc.Get(),
@@ -24,7 +24,7 @@ namespace rdr
 			IID_PPV_ARGS(pCommandList.GetAddressOf())
 		));
 
-		ThrowIfFailed(pd3dDevice->CreateFence(
+		CHECK_RESULT(pd3dDevice->CreateFence(
 			0,
 			D3D12_FENCE_FLAG_NONE,
 			IID_PPV_ARGS(pFence.GetAddressOf())
@@ -32,7 +32,7 @@ namespace rdr
 
 		fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
 		if (fenceEvent == nullptr)
-			ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
+			CHECK_RESULT(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
 	Commond::~Commond()

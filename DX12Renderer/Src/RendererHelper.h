@@ -22,20 +22,27 @@ namespace rdr
 			Filename(filename),
 			LineNumber(lineNumber)
 		{
+			_com_error err(ErrorCode);
+			std::wstring msg = err.ErrorMessage();
 
+			ErrorMsg = FunctionName + L" failed in " + Filename + L"; line " + std::to_wstring(LineNumber) + L"; error: " + msg;
+		}
+
+		DxException(const std::wstring& errorMsg,  const std::wstring& fileName, int lineNum)
+			: Filename(fileName), LineNumber(lineNum)
+		{
+			ErrorMsg = L" error in " + Filename + L"; line " + std::to_wstring(LineNumber) + L"; message: " + errorMsg;
 		}
 
 		std::wstring ToString()const
 		{
-			_com_error err(ErrorCode);
-			std::wstring msg = err.ErrorMessage();
-
-			return FunctionName + L" failed in " + Filename + L"; line " + std::to_wstring(LineNumber) + L"; error: " + msg;
+			return ErrorMsg;
 		}
 
 		HRESULT ErrorCode = S_OK;
 		std::wstring FunctionName;
 		std::wstring Filename;
+		std::wstring ErrorMsg;
 		int LineNumber = -1;
 	};
 
@@ -46,8 +53,8 @@ namespace rdr
 		return std::wstring(buffer);
 	}
 
-#ifndef ThrowIfFailed
-#define ThrowIfFailed(x)                                              \
+#ifndef CHECK_RESULT
+#define CHECK_RESULT(x)                                              \
 {                                                                     \
     HRESULT hr__ = (x);                                               \
     std::wstring wfn = AnsiToWString(__FILE__);                       \
@@ -55,9 +62,12 @@ namespace rdr
 }
 #endif
 
-#ifndef ReleaseCom
-#define ReleaseCom(x) { if(x){ x->Release(); x = 0; } }
-#endif
+#define DX_THROW(x)		\
+	{			\
+		std::wstring errorMsg = AnsiToWString(x);		\
+		std::wstring wfn = AnsiToWString(__FILE__);		\
+		throw DxException(errorMsg, wfn, __LINE__);		\
+	}
 
 #define UpperAlignment(A,B) ((UINT)(((A)+((B)-1))&~(B - 1)))
 
@@ -82,7 +92,7 @@ namespace rdr
 		if (errors != nullptr)
 			OutputDebugStringA((char*)errors->GetBufferPointer());
 
-		ThrowIfFailed(hr);
+		CHECK_RESULT(hr);
 
 		return byteCode;
 	}
@@ -122,5 +132,10 @@ namespace rdr
 		else normalName = tempName + "_normal";
 		std::tuple<std::string, std::string> result = std::make_tuple(diffuseName, normalName);
 		return result;
+	}
+
+	static std::wstring Float3ToWstring(const DirectX::XMFLOAT3& InVec)
+	{
+		return L"(" + std::to_wstring(InVec.x) + L", " + std::to_wstring(InVec.y) + L", " + std::to_wstring(InVec.z) + L")";
 	}
 }

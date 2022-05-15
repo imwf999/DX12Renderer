@@ -19,7 +19,7 @@ namespace rdr
 		defaultHeapDesc.Properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 		defaultHeapDesc.SizeInBytes = defaultHeapSize;
 		defaultHeapDesc.Flags = D3D12_HEAP_FLAG_NONE;
-		ThrowIfFailed(pDevice->CreateHeap(&defaultHeapDesc, IID_PPV_ARGS(pDefaultHeap.GetAddressOf())));
+		CHECK_RESULT(pDevice->CreateHeap(&defaultHeapDesc, IID_PPV_ARGS(pDefaultHeap.GetAddressOf())));
 
 		D3D12_HEAP_DESC uploadHeapDesc = {};
 		uploadHeapDesc.Alignment = D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT;
@@ -28,7 +28,7 @@ namespace rdr
 		uploadHeapDesc.Properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 		uploadHeapDesc.SizeInBytes = uploadHeapSize;
 		uploadHeapDesc.Flags = D3D12_HEAP_FLAG_ALLOW_ONLY_BUFFERS;
-		ThrowIfFailed(pDevice->CreateHeap(&uploadHeapDesc, IID_PPV_ARGS(pUploadHeap.GetAddressOf())));
+		CHECK_RESULT(pDevice->CreateHeap(&uploadHeapDesc, IID_PPV_ARGS(pUploadHeap.GetAddressOf())));
 	}
 
 	HeapManager::~HeapManager()
@@ -38,7 +38,7 @@ namespace rdr
 
 	void HeapManager::CreateBufferInDefaultHeap(const void* pData, BaseResource* ptrResource, ID3D12GraphicsCommandList* pList)
 	{
-		ThrowIfFailed(pDevice->CreatePlacedResource(
+		CHECK_RESULT(pDevice->CreatePlacedResource(
 			pDefaultHeap.Get(),
 			defaultHeapOffset,
 			&ptrResource->GetResourceDesc(),
@@ -48,7 +48,7 @@ namespace rdr
 
 		defaultHeapOffset = UpperAlignment(defaultHeapOffset + ptrResource->GetResourceDesc().Width, D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT);
 
-		ThrowIfFailed(pDevice->CreatePlacedResource(
+		CHECK_RESULT(pDevice->CreatePlacedResource(
 			pUploadHeap.Get(),
 			uploadHeapOffset,
 			&ptrResource->GetResourceDesc(),
@@ -77,7 +77,7 @@ namespace rdr
 
 	void rdr::HeapManager::CreateTextureInDefaultHeap(Texture* pResource, ID3D12GraphicsCommandList* pList, std::vector<D3D12_SUBRESOURCE_DATA>& subResourceVec)
 	{
-		ThrowIfFailed(pDevice->CreatePlacedResource(
+		CHECK_RESULT(pDevice->CreatePlacedResource(
 			pDefaultHeap.Get(),
 			defaultHeapOffset,
 			&pResource->GetResourceDesc(),
@@ -93,7 +93,7 @@ namespace rdr
 
 		this->defaultHeapOffset = UpperAlignment(defaultHeapOffset + static_cast<uint64_t>(textureUploadSize * OffsetRate), D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT);
 
-		ThrowIfFailed(pDevice->CreatePlacedResource(
+		CHECK_RESULT(pDevice->CreatePlacedResource(
 			pUploadHeap.Get(),
 			uploadHeapOffset,
 			&resourceUploadDesc,
@@ -122,7 +122,7 @@ namespace rdr
 
 	void HeapManager::CreateTextureInDefaultHeap(Texture* pResource, ID3D12GraphicsCommandList* pList)
 	{
-		ThrowIfFailed(pDevice->CreatePlacedResource(
+		CHECK_RESULT(pDevice->CreatePlacedResource(
 			pDefaultHeap.Get(),
 			defaultHeapOffset,
 			&pResource->GetResourceDesc(),
@@ -137,7 +137,7 @@ namespace rdr
 
 	void HeapManager::CreateBufferInUploadHeap(BaseResource* pResource, uint32_t bufferSize)
 	{
-		ThrowIfFailed(pDevice->CreatePlacedResource(
+		CHECK_RESULT(pDevice->CreatePlacedResource(
 			this->pUploadHeap.Get(),
 			uploadHeapOffset,
 			&pResource->GetResourceDesc(),

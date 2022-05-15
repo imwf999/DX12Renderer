@@ -49,6 +49,7 @@ namespace rdr
 	//Note:
 	//渲染场景中的叶片时需要把BlendState.AlphaToCoverageEnable置为true，不然边缘部分都是黑色的
 	//或者也可以在像素着色器中加一个clip(alpha - 0.01f)，把alpha值等于小于0.01f的剔除
+	//在G-Buffer中加入多渲染目标后，就必须在G-Buffer着色器中手动调用clip函数，只这里设置true不起作用
 	struct PhongPSO
 	{
 		PhongPSO()

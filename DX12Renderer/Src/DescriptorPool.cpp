@@ -24,7 +24,7 @@ namespace rdr
 
 		pRtvHeap = std::make_unique<DescriptorHeap>(
 			device.Get(),
-			global_RenderTargetNum,
+			global_RTVHeapLength,
 			D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
 			desc.isRtvShaderVisible);
 
@@ -65,7 +65,7 @@ namespace rdr
 	uint32_t DescriptorPool::CreateSRV(ID3D12Resource* pResource, const D3D12_SHADER_RESOURCE_VIEW_DESC* desc)
 	{
 		if (srvNum >= global_InitDescHeapLength)
-			throw "descriptor pool over flow";
+			DX_THROW("descriptor pool over flow");
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = pSrvUavCbvHeap->pDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 		handle.ptr += static_cast<UINT64>(srvNum) * pSrvUavCbvHeap->descriptorSize;
 		pDevice->CreateShaderResourceView(pResource, desc, handle);

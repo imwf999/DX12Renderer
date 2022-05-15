@@ -1,9 +1,13 @@
 ﻿#include "Input.h"
+
+#include "Audio.h"
 #include "Camera.h"
 #include "GameTimer.h"
 #include "ConstValue.h"
 #include "Renderer.h"
 #include "MaterialPool.h"
+#include "Game.h"
+#include "UIManager.h"
 
 namespace rdr
 {
@@ -11,6 +15,11 @@ namespace rdr
 		: angle(0), lastPostionX(0), lastPostionY(0), isRightButtonDown(false), rotateCameraFunc(ratateFunc)
 	{
 
+	}
+
+	void Input::OnLeftMouseDown(int x, int y)
+	{
+		Game::Instance()->GetUIManager()->CheckClick(x + 2.0f, y + 5.0f);
 	}
 
 	void Input::Update(const GameTimer& gameTimer, Camera& camera, const Renderer& renderer)
@@ -35,9 +44,5 @@ namespace rdr
 			if (GetAsyncKeyState('E') & 0x8000)
 				camera.MoveUp(camera.GetMoveSpeed() * deltaTime);
 		}
-		if (GetAsyncKeyState('I') & 0x8000)
-			renderer.GetMaterialPool()->SetOpenIndirectLight(false);
-		if (GetAsyncKeyState('O') & 0x8000)
-			renderer.GetMaterialPool()->SetOpenIndirectLight(true);
 	}
 }

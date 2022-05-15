@@ -179,11 +179,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Audio.cpp" />
     <ClCompile Include="Src\BaseResource.cpp" />
+    <ClCompile Include="Src\BaseUI.cpp" />
     <ClCompile Include="Src\Camera.cpp" />
     <ClCompile Include="Src\Commond.cpp" />
     <ClCompile Include="Src\ConstantBuffer.cpp" />
-    <ClCompile Include="Src\d3dUtil.cpp" />
     <ClCompile Include="Src\DDSTextureLoader12.cpp" />
     <ClCompile Include="Src\DepthTexture.cpp" />
     <ClCompile Include="Src\DescriptorPool.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="Src\MaterialPool.cpp" />
     <ClCompile Include="Src\MathHelper.cpp" />
     <ClCompile Include="Src\Mesh.cpp" />
+    <ClCompile Include="Src\MeshHandler.cpp" />
     <ClCompile Include="Src\PSO.cpp" />
     <ClCompile Include="Src\Renderer.cpp" />
     <ClCompile Include="Src\RenderTexture.cpp" />
@@ -209,16 +211,20 @@
     <ClCompile Include="Src\CommonTexture.cpp" />
     <ClCompile Include="Src\Shadow.cpp" />
     <ClCompile Include="Src\SSAO.cpp" />
+    <ClCompile Include="Src\Text.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
     <ClCompile Include="Src\TexturePool.cpp" />
+    <ClCompile Include="Src\Toggle.cpp" />
+    <ClCompile Include="Src\UIManager.cpp" />
+    <ClCompile Include="Src\UIRenderer.cpp" />
     <ClCompile Include="Src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Audio.h" />
     <ClInclude Include="Src\Camera.h" />
     <ClInclude Include="Src\Commond.h" />
     <ClInclude Include="Src\ConstantBuffer.h" />
     <ClInclude Include="Src\ConstValue.h" />
-    <ClInclude Include="Src\d3dUtil.h" />
     <ClInclude Include="Src\d3dx12.h" />
     <ClInclude Include="Src\DDSTextureLoader12.h" />
     <ClInclude Include="Src\DepthTexture.h" />
@@ -231,8 +237,10 @@
     <ClInclude Include="Src\IndexBuffer.h" />
     <ClInclude Include="Src\Input.h" />
     <ClInclude Include="Src\FrameConstBuffer.h" />
+    <ClInclude Include="Src\MeshHandler.h" />
     <ClInclude Include="Src\PSO.h" />
     <ClInclude Include="Src\BaseResource.h" />
+    <ClInclude Include="Src\Text.h" />
     <ClInclude Include="Src\Texture.h" />
     <ClInclude Include="Src\LightPool.h" />
     <ClInclude Include="Src\Material.h" />
@@ -250,6 +258,11 @@
     <ClInclude Include="Src\Shadow.h" />
     <ClInclude Include="Src\SSAO.h" />
     <ClInclude Include="Src\TexturePool.h" />
+    <ClInclude Include="Src\BaseUI.h" />
+    <ClInclude Include="Src\Toggle.h" />
+    <ClInclude Include="Src\UIClick.h" />
+    <ClInclude Include="Src\UIManager.h" />
+    <ClInclude Include="Src\UIRenderer.h" />
     <ClInclude Include="Src\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>

@@ -22,10 +22,10 @@ namespace rdr
 		const D3D12_VIEWPORT& GetViewPort() const { return viewPort; }
 		const D3D12_RECT& GetRect() const { return rect; }
 		ID3D12Device4* GetDevice() const { return pd3dDevice; }
-		uint32_t GetCurBackBufferIndex() const { return currentBackBufferIndex; }
+		uint32_t GetCurrentBackBufferIndex() const { return currentBackBufferIndex; }
+		const std::unique_ptr<RenderTexture>* GetRenderTargetArr() const { return pSwapChainBufferArr; }
 
 	private:
-		static constexpr int swapChainBufferCount = 2;		//交换链中后台缓冲的数量
 		uint32_t currentBackBufferIndex;							//当前后台缓冲区的索引
 		ComPtr<IDXGISwapChain1> pSwapChain1;
 		ComPtr<IDXGISwapChain3> pSwapChain3;
@@ -34,6 +34,6 @@ namespace rdr
 		IDXGIAdapter1* pAdapter;
 		D3D12_VIEWPORT viewPort = { 0, 0, static_cast<float>(global_WindowWidth), static_cast<float>(global_WindowHeight), 0, 1.0f };
 		D3D12_RECT rect = { 0, 0,static_cast<LONG>(global_WindowWidth), static_cast<LONG>(global_WindowHeight) };
-		std::unique_ptr<RenderTexture> pSwapChainBufferArr[swapChainBufferCount];
+		std::unique_ptr<RenderTexture> pSwapChainBufferArr[global_SwapChainBufferCount];
 	};
 }

@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include "DepthTexture.h"
 #include "ConstValue.h"
+#include "RendererHelper.h"
 
 namespace rdr
 {
@@ -26,7 +27,7 @@ namespace rdr
 		{
 			const auto& index = TextureMap.find(name);
 			if (index == TextureMap.end())
-				throw "No Such Texture";
+				DX_THROW("No Such Texture");
 			return index->second;
 		}
 
@@ -35,7 +36,7 @@ namespace rdr
 			const std::string& tName = ptrTex->GetName();
 			const auto& tIndex = TextureMap.find(tName);
 			if (tIndex != TextureMap.cend())
-				throw "Two Texture Have The Same Name";
+				DX_THROW("Two Texture Have The Same Name");
 			TextureMap.insert({ tName, ptrTex });
 		}
 
